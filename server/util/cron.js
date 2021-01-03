@@ -7,7 +7,7 @@ const axios = require("axios");
 
 module.exports = (io) => {
   // return;
-  (async function getUpadtedData() {
+  async function getUpadtedData() {
     const tokens = await Token.find();
     // const [_,...tokens] = await Token.find();
 
@@ -54,7 +54,7 @@ module.exports = (io) => {
       await ele.save();
     });
     io.emit("update", data);
-  });
+  }
   const task = cron.schedule(
     `*/${process.env.CRON_INTERVAL} * * * *`,
     getUpadtedData,
