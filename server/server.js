@@ -17,7 +17,7 @@ nextApp
   .prepare()
   .then(() => {
     const app = express();
-    console.log(process.env.CLIENT_URL);
+
     app.use(express.json());
     app.use(cors({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
     const sessionStore = new session.MemoryStore();
