@@ -31,7 +31,8 @@ export default function Home() {
   //   console.log(darkMode);
   // }, [darkMode]);
   // console.log(darkMode);
-  const socket = io("http://localhost:5000");
+  const socket = io("https://coin-market-chart.herokuapp.com/");
+  // const socket = io("http://localhost:5000");
   socket.on("hello", (data) => console.log(data));
 
   // const theme = getTheme(false);
