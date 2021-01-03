@@ -25,9 +25,9 @@ import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
   { id: "_id", label: "#", minWidth: 10 },
-  { id: "name", label: "Name", minWidth: 100 },
+  { id: "name", label: "Name", minWidth: 80 },
   { id: "contractAddress", label: "Contract Address", minWidth: 100 },
-  { id: "price", label: "Price", minWidth: 100, sort: true },
+  { id: "price", label: "Price", minWidth: 80, sort: true },
   {
     id: "marketCap",
     label: "Market Cap",
@@ -61,7 +61,7 @@ const columns = [
   {
     id: "maxSupply",
     label: "Max Supply",
-    minWidth: 190,
+    minWidth: 170,
     tooltip: {
       data: "random max supply data",
       link: "some cs link",
