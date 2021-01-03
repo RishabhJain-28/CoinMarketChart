@@ -343,3 +343,16 @@ export default function TokenTable({ socket }) {
     </Paper>
   );
 }
+
+// export async function getServerSideProps(context) {
+//   console.log(context.socket);
+//   try {
+//     const { data } = await axios.get(`/tokens/`);
+//     return {
+//       props: { tokens: data }, // will be passed to the page component as props
+//     };
+//   } catch (err) {
+//     console.log(err);
+//     return { props: {} };
+//   }
+// }
