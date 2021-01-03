@@ -54,15 +54,15 @@ module.exports = (io) => {
       await ele.save();
     });
     io.emit("update", data);
-  })();
-  // const task = cron.schedule(
-  //   `*/${process.env.CRON_INTERVAL} * * * *`,
-  //   getUpadtedData,
-  //   {
-  //     scheduled: false,
-  //   }
-  // );
-  // task.start();
+  });
+  const task = cron.schedule(
+    `*/${process.env.CRON_INTERVAL} * * * *`,
+    getUpadtedData,
+    {
+      scheduled: false,
+    }
+  );
+  task.start();
 };
 
 // async function getONEUSDT() {
