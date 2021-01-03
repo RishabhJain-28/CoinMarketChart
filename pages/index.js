@@ -1,65 +1,86 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useState, useEffect } from "react";
+import Head from "next/head";
+// import styles from "../styles/Home.module.css";
+import {
+  makeStyles,
+  ThemeProvider,
+  createMuiTheme,
+} from "@material-ui/core/styles";
+import { Paper, Switch, Grid, Container } from "@material-ui/core";
+
+import TokenTable from "../components/TokenTable";
+
+import { io } from "socket.io-client";
+
+const useStyles = makeStyles({});
 
 export default function Home() {
+  const classes = useStyles();
+
+  // const [darkMode, setDarkMode] = useState(false);
+  // let theme = {};
+  // if (typeof window === undefined) theme = createMuiTheme({});
+  // else
+  //   theme = createMuiTheme({
+  //     palette: { type: darkMode ? "dark" : "light" },
+  //   });
+  // const theme = createMuiTheme({
+  //   palette: { type: darkMode ? "dark" : "light" },
+  // });
+  // useEffect(() => {
+  //   console.log(darkMode);
+  // }, [darkMode]);
+  // console.log(darkMode);
+  const socket = io("http://localhost:5000");
+  socket.on("hello", (data) => console.log(data));
+
+  // const theme = getTheme(false);
+  // if (typeof window !== "undefined") {
+  //   useEffect(() => {
+  //     console.log(darkMode);
+  //   }, [window]);
+  // }
+
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* <ThemeProvider theme={theme}> */}
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      {/* <Container maxWidth="lg"> */}
+      {/* <Paper> */}
+      {/* <div className={classes.root}> */}
+      {/* <Switch
+            checked={darkMode}
+            onChange={() => {
+              console.log(darkMode);
+             
+            }}
+          /> */}
+      {/* {typeof window !== "undefined" ? (
+          ) : (
+            <>
+              <Switch
+              checked={darkMode}
+                onChange={() => {
+                  console.log(darkMode);
+                  setDarkMode(!darkMode);
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+                }}
+              />
+              </>
+          )} */}
+      <Grid container justify="center">
+        <Grid item xs={10}>
+          <TokenTable socket={socket} />
+        </Grid>
+      </Grid>
+      {/* </div> */}
+      {/* </Paper> */}
+      {/* </Container> */}
+      {/* </ThemeProvider> */}
+    </>
+  );
 }
