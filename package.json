@@ -15,6 +15,7 @@
     "@material-ui/icons": "^4.11.2",
     "@uiw/react-md-editor": "^2.0.3",
     "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
     "clsx": "^1.1.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
