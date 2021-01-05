@@ -26,7 +26,8 @@ import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
   { id: "_id", label: "#", minWidth: 10 },
-  { id: "name", label: "Name", minWidth: 200 },
+  { id: "image", label: "", minWidth: 65 },
+  { id: "name", label: "Name", minWidth: 100 },
   { id: "contractAddress", label: "Contract Address", minWidth: 100 },
   { id: "price", label: "Price", minWidth: 80, sort: true },
   {
@@ -298,19 +299,24 @@ export default function TokenTable({ socket, tokens }) {
                       if (value === undefined) return null;
                       console.log(`/uploads/${row.image}`);
                       return (
-                        <TableCell key={i} align={column.align}>
-                          {column.id === "name" && (
-                            <Image
-                              src={`/uploads/${row.image}`}
-                              alt="coin"
-                              layout="intrinsic"
-                              width={36}
-                              height={36}
-                            />
+                        <>
+                          {column.id === "image" ? (
+                            <TableCell key={row.image} align={column.align}>
+                              <Image
+                                src={`/uploads/${row.image}`}
+                                alt="coin"
+                                layout="intrinsic"
+                                width={100}
+                                height={100}
+                              />
+                            </TableCell>
+                          ) : (
+                            <TableCell key={i} align={column.align}>
+                              {value}
+                              <a />
+                            </TableCell>
                           )}
-                          {value}
-                          <a />
-                        </TableCell>
+                        </>
                       );
                     })}
                     {/* </Link> */}

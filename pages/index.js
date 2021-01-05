@@ -68,8 +68,8 @@ export default function Home(props) {
   //   console.log(darkMode);
   // }, [darkMode]);
   // console.log(darkMode);
-  // const socket = io("https://coin-market-chart.herokuapp.com/");
-  const socket = io("http://localhost:5000");
+  const socket = io("https://coin-market-chart.herokuapp.com/");
+  // const socket = io("http://localhost:5000");
   // socket.on("hello", (data) => console.log(data));
   // socket.on("updateData", (data) => {
   //   console.log(data);
