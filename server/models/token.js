@@ -7,6 +7,10 @@ const tokenSchema = mongoose.Schema(
     //   unique: true,
     //   required: true,
     // },
+    number: {
+      type: Number,
+      // required: true,
+    },
     image: {
       type: String,
       // required: true,

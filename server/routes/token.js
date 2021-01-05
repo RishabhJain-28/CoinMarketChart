@@ -7,6 +7,16 @@ const upload = require("../config/multerConfig");
 // * Models
 const Token = require("../models/token");
 
+(async function a() {
+  let i = 1;
+  const tokens = await Token.find();
+  tokens.forEach(async (t) => {
+    t.number = i;
+    i++;
+    await t.save();
+  });
+})();
+
 // * Middleware
 
 //* Validation
@@ -75,7 +85,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/new", upload.single("image"), async (req, res) => {
   //! no imgae upload
-
+  const count = await Token.count();
   console.log(req.body.newToken);
   console.log(req.body);
   console.log(req.file.filename);
@@ -87,7 +97,7 @@ router.post("/new", upload.single("image"), async (req, res) => {
     return res
       .status(400)
       .send({ error: "Invalid token body", message: error.details[0].message });
-  const newToken = new Token({ ...value }); //! pick
+  const newToken = new Token({ ...value, number: count + 1 }); //! pick
   //! add token validation
   await newToken.save();
   res.send(newToken);

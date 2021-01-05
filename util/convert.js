@@ -5,8 +5,8 @@ const convert = (tokens_data, property, unit, conversionPrices) => {
 
   const convertUnit = (value, unit, conversionPrices) => {
     const { onePriceInUSD, btcPriceInUSD } = conversionPrices;
-    if (unit === USD) return value * onePriceInUSD;
-    else if (unit === BTC) return (value * onePriceInUSD) / btcPriceInUSD;
+    if (unit === USD) return onePriceInUSD / value;
+    else if (unit === BTC) return (onePriceInUSD / value) * btcPriceInUSD;
     else return value;
   };
 

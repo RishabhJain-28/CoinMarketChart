@@ -25,10 +25,10 @@ import useAsync from "../util/hooks/useAsync";
 import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
-  { id: "_id", label: "#", minWidth: 10 },
+  { id: "number", label: "#", minWidth: 10 },
   { id: "image", label: "", minWidth: 65 },
-  { id: "name", label: "Name", minWidth: 100 },
-  { id: "contractAddress", label: "Contract Address", minWidth: 100 },
+  { id: "symbol", label: "Name", minWidth: 100 },
+  // { id: "contractAddress", label: "Contract Address", minWidth: 100 },
   { id: "price", label: "Price", minWidth: 80, sort: true },
   {
     id: "marketCap",

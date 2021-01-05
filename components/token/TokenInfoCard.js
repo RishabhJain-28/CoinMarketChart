@@ -4,10 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Title from "./Title";
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 const useStyles = makeStyles({
   depositContext: {
     flex: 1,
@@ -51,6 +47,11 @@ export default function TokenInfoCard({ token }) {
         {/* $3,024.00 */}
         {circulationSupply}
       </Typography>
+      <Title>Contract Address</Title>
+      <Typography component="p" variant="body1">
+        {/* $3,024.00 */}
+        {contractAddress}
+      </Typography>
       {/* <Typography color="textSecondary" className={classes.depositContext}>
         Last update:
       </Typography> */}
@@ -62,9 +63,3 @@ export default function TokenInfoCard({ token }) {
     </React.Fragment>
   );
 }
-
-// export async function getServerSideProps(context) {
-//   return {
-//     props: context, // will be passed to the page component as props
-//   };
-// }

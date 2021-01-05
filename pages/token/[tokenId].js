@@ -183,15 +183,19 @@ const Token = (props) => {
     try {
       const { data } = await axios.get(`/tokens/conversionPrices`);
       console.log(data);
-      setConversionPrices(data);
       console.log(token);
       const a = [token];
-      const temp = convert(a, "price", unit, data);
-      const [xz] = convert(temp, "marketCap", unit, data);
-      console.log("final", xz);
-      setToken(xz);
+      const [temp] = convert(a, "price", unit, data);
+      // const [xz] = convert(temp, "marketCap", unit, data);
+      console.log("final", temp);
+      setConversionPrices(data);
+      setToken(() => {
+        console.log("unit", unit);
+        console.log("setTOKEN", temp);
+        return temp;
+      });
     } catch (err) {
-      console.log("err");
+      console.log("err2");
       console.log(err);
     }
   };
@@ -222,7 +226,7 @@ const Token = (props) => {
             <Main displayInfo={token.displayInfo} />
             <Grid item xs={12} md={4}>
               <Paper className={classes.paper}>
-                <TokenInfoCard token={token} />
+                <TokenInfoCard token={token} p={token.price} />
               </Paper>
             </Grid>
           </Grid>
@@ -231,7 +235,7 @@ const Token = (props) => {
           <Grid container spacing={5} className={classes.mainGrid}>
             <Grid item xs={12} md={4}>
               <Paper className={classes.paper}>
-                <TokenInfoCard token={token} />
+                <TokenInfoCard token={token} p={token.price} />
               </Paper>
             </Grid>
             <Main displayInfo={token.displayInfo} />
