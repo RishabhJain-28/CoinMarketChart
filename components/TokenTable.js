@@ -25,7 +25,7 @@ import useAsync from "../util/hooks/useAsync";
 import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
-  { id: "number", label: "#", minWidth: 10 },
+  { id: "number", label: "#", minWidth: 10, sort: true },
   { id: "image", label: "", minWidth: 65 },
   { id: "symbol", label: "Name", minWidth: 100 },
   // { id: "contractAddress", label: "Contract Address", minWidth: 100 },
