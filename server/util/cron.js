@@ -7,9 +7,21 @@ const axios = require("axios");
 
 module.exports = (io) => {
   // return;
-  async function getUpadtedData() {
+  (async function getUpadtedData() {
     const tokens = await Token.find();
-    // const [_,...tokens] = await Token.find();
+    // const [ONE, ONEs, ...tokens] = await Token.find();
+
+    // async function getONEUSDT() {
+    //   const { data } = await axios.get(
+    //     "https://api.binance.com/api/v1/ticker/24hr?symbol=ONEUSDT"
+    //   );
+    // }
+
+    // const { data:ONEUSDT } = await axios.get(
+    //   "https://api.binance.com/api/v1/ticker/24hr?symbol=ONEUSDT"
+    // );
+
+    // ONE.price = ONEUSDT.lastPrice
 
     // const [A, B] = await Token.find();
     // const tokens = [A, B];
@@ -53,17 +65,27 @@ module.exports = (io) => {
       //   base.push(ele.base);
       await ele.save();
     });
+    // await data.save();
     io.emit("update", data);
-  }
-  const task = cron.schedule(
-    `*/${process.env.CRON_INTERVAL} * * * *`,
-    getUpadtedData,
-    {
-      scheduled: false,
-    }
-  );
-  task.start();
+  })();
+  // const task = cron.schedule(
+  //   `*/${process.env.CRON_INTERVAL} * * * *`,
+  //   getUpadtedData,
+  //   {
+  //     scheduled: false,
+  //   }
+  // );
+  // task.start();
 };
+
+// router.get("/BTCUSDT", async (req, res) => {
+//   const { data } = await axios.get(
+//     "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
+//   );
+//   console.log(data);
+//   res.send(data);
+//   //! save to db
+// });
 
 // async function getONEUSDT() {
 //   const { data } = await axios.get(

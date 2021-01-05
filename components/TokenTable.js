@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 // import Link from "next/Link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -25,7 +26,7 @@ import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
   { id: "_id", label: "#", minWidth: 10 },
-  { id: "name", label: "Name", minWidth: 80 },
+  { id: "name", label: "Name", minWidth: 200 },
   { id: "contractAddress", label: "Contract Address", minWidth: 100 },
   { id: "price", label: "Price", minWidth: 80, sort: true },
   {
@@ -138,36 +139,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TokenTable({ socket }) {
+export default function TokenTable({ socket, tokens }) {
   const router = useRouter();
 
   const classes = useStyles();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
-  const {
-    execute: getTokens,
-    status,
-    value: tokensData,
-    error,
-    setValue: setTokensData,
-  } = useAsync(() => axios.get("/tokens"), false);
+  // const {
+  //   execute: getTokens,
+  //   status,
+  //   value: tokensData,
+  //   error,
+  //   setValue: setTokensData,
+  // } = useAsync(() => axios.get("/tokens"), false);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
 
+  const [rows, setRows] = useState(tokens);
+
   useEffect(() => {
-    getTokens();
-  }, []);
-  socket.on("update", (data) => {
-    console.log(data);
-    setTokensData(data);
-  });
-  useEffect(() => {
-    console.log("setting", status);
-    if (status === "success") {
-      setRows(tokensData.data);
-      console.log(tokensData.data);
-    }
-  }, [status]);
+    console.log("token table", tokens);
+    setRows(tokens);
+  }, [tokens]);
+  // useEffect(() => {
+  //   getTokens();
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log("setting", status);
+  //   if (status === "success") {
+  //     setRows(tokensData.data);
+  //     console.log(tokensData.data);
+  //   }
+  // }, [status]);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -177,7 +181,6 @@ export default function TokenTable({ socket }) {
     setAnchorEl(null);
   };
 
-  const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const handleChangePage = (event, newPage) => {
@@ -293,8 +296,18 @@ export default function TokenTable({ socket }) {
                       // console.log(column.id);
                       // console.log(row["info.base.price"]);
                       if (value === undefined) return null;
+                      console.log(`/uploads/${row.image}`);
                       return (
                         <TableCell key={i} align={column.align}>
+                          {column.id === "name" && (
+                            <Image
+                              src={`/uploads/${row.image}`}
+                              alt="coin"
+                              layout="intrinsic"
+                              width={36}
+                              height={36}
+                            />
+                          )}
                           {value}
                           <a />
                         </TableCell>

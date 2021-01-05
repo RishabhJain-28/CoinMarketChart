@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,7 +18,9 @@ import Main from "../../components/token/Main";
 import TokenInfoCard from "../../components/token/TokenInfoCard";
 
 import axios from "../../util/axios";
-
+import UnitContext from "../../util/context/UnitContext";
+import convert from "../../util/convert";
+import { USD, ONE, BTC } from "../../util/UNITS";
 const post1 = `# Sample blog post
 
 #### April 1, 2020 by [Olivier](/)
@@ -167,35 +169,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const posts = [post1];
-
-const sidebar = {
-  title: "About",
-  description:
-    "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.",
-  archives: [
-    { title: "March 2020", url: "#" },
-    { title: "February 2020", url: "#" },
-    { title: "January 2020", url: "#" },
-    { title: "November 1999", url: "#" },
-    { title: "October 1999", url: "#" },
-    { title: "September 1999", url: "#" },
-    { title: "August 1999", url: "#" },
-    { title: "July 1999", url: "#" },
-    { title: "June 1999", url: "#" },
-    { title: "May 1999", url: "#" },
-    { title: "April 1999", url: "#" },
-  ],
-  social: [
-    { name: "GitHub", icon: GitHubIcon },
-    { name: "Twitter", icon: TwitterIcon },
-    { name: "Facebook", icon: FacebookIcon },
-  ],
-};
 const Token = (props) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const [token] = useState(props.token);
+  const [token, setToken] = useState(props.token);
+  const { unit, setUnit } = useContext(UnitContext);
+  const [conversionPrices, setConversionPrices] = useState({
+    onePriceInUSD: props.conversionPrices.onePriceInUSD,
+    btcPriceInUSD: props.conversionPrices.btcPriceInUSD,
+  });
+
+  const changeVal = async () => {
+    try {
+      const { data } = await axios.get(`/tokens/conversionPrices`);
+      console.log(data);
+      setConversionPrices(data);
+      console.log(token);
+      const a = [token];
+      const temp = convert(a, "price", unit, data);
+      const [xz] = convert(temp, "marketCap", unit, data);
+      console.log("final", xz);
+      setToken(xz);
+    } catch (err) {
+      console.log("err");
+      console.log(err);
+    }
+  };
+  console.log("unit token", unit);
+  useEffect(() => {
+    console.log("cahnge");
+    changeVal();
+  }, [unit]);
   // <React.Fragment>
   return (
     <Container maxWidth="lg">
@@ -244,8 +248,14 @@ export default Token;
 export async function getServerSideProps(context) {
   try {
     const { data } = await axios.get(`/tokens/${context.params.tokenId}`);
+    const { data: conversionPrices } = await axios.get(
+      `/tokens/conversionPrices`
+    );
+    let temp = [data];
+    temp = convert(temp, "price", USD, conversionPrices);
+    const [token] = convert(temp, "price", USD, conversionPrices);
     return {
-      props: { token: data, params: context.params }, // will be passed to the page component as props
+      props: { token, conversionPrices, params: context.params }, // will be passed to the page component as props
     };
   } catch (err) {
     console.log(err);

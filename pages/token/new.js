@@ -19,8 +19,9 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 // import MDEditor from "@uiw/react-md-editor";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import axios from "axios";
+import axios from "../../util/axios";
 // import dynamic from "next/dynamic";
+import FormLabel from "@material-ui/core/FormLabel";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  input: {
+    display: "none",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -47,6 +51,7 @@ export default function AddNewToken() {
   // const MDEditor = dynamic(import("@uiw/react-md-editor"));
 
   const classes = useStyles();
+  const [imageFile, setImageFile] = useState("");
   const [newToken, setNewToken] = useState({
     address: "",
     symbol: "",
@@ -63,7 +68,11 @@ export default function AddNewToken() {
   };
   const addNewToken = async () => {
     try {
-      const { data } = await axios.post("/tokens/new", newToken);
+      const formData = new FormData();
+      formData.append("image", imageFile, imageFile.name);
+      // formData.append("banner", banner);
+      formData.append("newToken", JSON.stringify(newToken));
+      const { data } = await axios.post("/tokens/new", formData);
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -82,6 +91,26 @@ export default function AddNewToken() {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl fullWidth required>
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  id="contained-button-file"
+                  // value={imageFile}
+                  type="file"
+                  onChange={(e) => {
+                    console.log(e.target.files[0]);
+                    setImageFile(e.target.files[0]);
+                  }}
+                />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" color="primary" component="span">
+                    Upload
+                  </Button>
+                </label>
+              </FormControl>
+            </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth required>
                 <InputLabel htmlFor="pool-address">Pool Address</InputLabel>

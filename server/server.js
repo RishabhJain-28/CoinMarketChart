@@ -7,6 +7,8 @@ const ioInit = require("socket.io");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+// const bodyParser = require("body-parser");
+
 const next = require("next");
 const path = require("path");
 const dev = process.env.NODE_ENV !== "production";
@@ -17,9 +19,11 @@ nextApp
   .prepare()
   .then(() => {
     const app = express();
-
-    app.use(express.json());
     app.use(cors({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
+
+    // app.use(bodyParser.json());
+    // app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.json());
     const sessionStore = new session.MemoryStore();
     app.use(
       session({

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
+import { useContext } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -20,7 +20,22 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import HomeIcon from "@material-ui/icons/Home";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import UnitContext from "../util/context/UnitContext";
+import UNITS from "../util/UNITS";
+
 const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
   grow: {
     flexGrow: 1,
   },
@@ -88,7 +103,7 @@ export default function PrimarySearchAppBar({ darkMode, setDarkMode }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const { unit, setUnit } = useContext(UnitContext);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -223,6 +238,34 @@ export default function PrimarySearchAppBar({ darkMode, setDarkMode }) {
             />
           </div> */}
           <div className={classes.grow} />
+          <FormControl className={classes.formControl}>
+            {/* <InputLabel htmlFor="age-native-simple">{unit}</InputLabel> */}
+            <Select
+              native
+              value={unit}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUnit(e.target.value);
+              }}
+              inputProps={{
+                name: "age",
+                id: "age-native-simple",
+              }}
+            >
+              {Object.keys(UNITS).map((key) => {
+                return (
+                  <option key={UNITS[key]} value={UNITS[key]}>
+                    {UNITS[key]}
+                  </option>
+                );
+              })}
+
+              {/* <option aria-label="None" value="" />
+          <option value={20}>Twenty</option>
+          <option value={30}>Thirty</option>
+        */}
+            </Select>
+          </FormControl>
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="home" color="inherit">
               {/* <Badge badgeontent={4} color="secondary"> */}

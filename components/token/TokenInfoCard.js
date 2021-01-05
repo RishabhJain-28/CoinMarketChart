@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -25,7 +25,10 @@ export default function TokenInfoCard({ token }) {
     circulationSupply,
     maxSupply,
   } = token;
-  // console.log(props);
+  // console.log("infi card ", token);
+  useEffect(() => {
+    console.log("infi card update", token);
+  }, [token]);
   return (
     <React.Fragment>
       <Title>Current Price:</Title>

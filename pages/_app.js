@@ -7,9 +7,12 @@ import Layout from "../components/Layout";
 import themeOBJ from "../theme/index";
 import useLocalStorage from "../util/hooks/useLocalStorage";
 import { io } from "socket.io-client";
+
+import UnitContext from "../util/context/UnitContext";
 export default function MyApp(props) {
   const { Component, pageProps } = props;
   const [darkMode, setDarkMode] = useState(false);
+  const [unit, setUnit] = useState("USD");
   // const [darkMode, setDarkMode] = useLocalStorage("darkMode", false);
 
   React.useEffect(() => {
@@ -39,15 +42,39 @@ export default function MyApp(props) {
         <ThemeProvider theme={colorMode}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
-            <Component {...pageProps} />
-          </Layout>
+          <UnitContext.Provider value={{ unit, setUnit }}>
+            <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
+              <Component {...pageProps} />
+            </Layout>
+          </UnitContext.Provider>
         </ThemeProvider>
       </ThemeProvider>
     </React.Fragment>
   );
 }
 
+// export async function getServerSideProps(context) {
+//   try {
+
+//     const { data: conversionPrices } = await axios.get(
+//       `/tokens/conversionPrices`
+//     );
+//     // // console.log("data", conversionPrices);
+//     // if ( !conversionPrices) {
+//     //   return {
+//     //     notFound: true,
+//     //   };
+//     // }
+//     console.log("_app", conversionPrices);
+//     // console.log("tokens[0].cp", tokens[0].marketCap);
+//     return {
+//       props: {  conversionPrices ,...context},
+//     };
+//   } catch (err) {
+//     console.log(err);
+//     return { props: {} };
+//   }
+// }
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
