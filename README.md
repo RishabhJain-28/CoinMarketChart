@@ -40,7 +40,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 The client UI is rendered by the server which also privides all the data.
 The server fetches data from https://seeswap.one/swap and https://explorer.harmony.one/ every five minutes which is then pushed to all the clients via socket.io.
-All the data is stored in mongoDB atlas.
+All the data is stored in mongoDB atlas connected via the server.
 
 ## Tech stack used:
 
