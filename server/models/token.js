@@ -92,6 +92,11 @@ tokenSchema.virtual("name").get(function () {
 tokenSchema.virtual("marketCap").get(function () {
   return this.circulationSupply * this.price;
 });
+tokenSchema.virtual("chartData", {
+  ref: "chart",
+  localField: "_id",
+  foreignField: "token",
+});
 const Token = mongoose.model("token", tokenSchema);
 
 module.exports = Token;

@@ -51,17 +51,20 @@ nextApp
       },
       (err) => {
         if (err) return console.log("Connection to MongoDB failed.\n", err);
-        return console.log("Connected to MongoDB");
+        console.log("Connected to MongoDB");
+        require("./util/testChart");
       }
     );
 
     // * Route imports
     const token = require("./routes/token");
     const user = require("./routes/user");
+    const chart = require("./routes/chart");
 
     // * Routes
     app.use("/api/tokens", token);
     app.use("/api/user", user);
+    app.use("/api/chart", chart);
     app.get("*", (req, res) => {
       return handle(req, res);
     });
@@ -87,9 +90,9 @@ nextApp
     // * CRON
     require("./util/cron")(io);
 
-    app.get("/", (req, res) => {
-      res.send("a");
-    });
+    // app.get("/", (req, res) => {
+    //   res.send("a");
+    // });
 
     // * Production setup
     if (process.env.NODE_ENV === "production") {

@@ -67,7 +67,8 @@ module.exports = (io) => {
     });
     // await data.save();
     io.emit("update", data);
-  })();
+  });
+  // })();
   // const task = cron.schedule(
   //   `*/${process.env.CRON_INTERVAL} * * * *`,
   //   getUpadtedData,
@@ -92,3 +93,4 @@ module.exports = (io) => {
 //     "https://api.binance.com/api/v1/ticker/24hr?symbol=ONEUSDT"
 //   );
 // }
+

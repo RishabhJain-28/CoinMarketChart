@@ -7,15 +7,15 @@ const upload = require("../config/multerConfig");
 // * Models
 const Token = require("../models/token");
 
-(async function a() {
-  let i = 1;
-  const tokens = await Token.find();
-  tokens.forEach(async (t) => {
-    t.number = i;
-    i++;
-    await t.save();
-  });
-})();
+// (async function a() {
+//   let i = 1;
+//   const tokens = await Token.find();
+//   tokens.forEach(async (t) => {
+//     t.number = i;
+//     i++;
+//     await t.save();
+//   });
+// })();
 
 // * Middleware
 
@@ -90,7 +90,7 @@ router.post("/new", upload.single("image"), async (req, res) => {
   console.log(req.body);
   console.log(req.file.filename);
   const body = JSON.parse(req.body.newToken);
-  body.image = req.file.filename;
+  body.image = req.file.filename.toLowerCase();
   // return;
   const { value, error } = tokenValidator.newToken(body);
   if (error)
