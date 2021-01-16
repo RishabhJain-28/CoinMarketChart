@@ -11,48 +11,36 @@ import { Paper, Switch, Grid, Container } from "@material-ui/core";
 import TokenTable from "../components/TokenTable";
 import axios from "../util/axios";
 import { io } from "socket.io-client";
-import { ONE, BTC, USD } from "../util/UNITS";
+import { USD } from "../util/UNITS";
 // const  = UNITS;
 
 import UnitContext from "../util/context/UnitContext";
-import convert from "../util/convert";
+import convertPriceAndMarketCap from "../util/convertPriceAndMarketCap";
 
 const useStyles = makeStyles({});
 
-export default function Home(props) {
+function Home({ tokens: tokens_props }) {
   const classes = useStyles();
-  const { unit, setUnit } = useContext(UnitContext);
-  const [tokens, setTokens] = useState(props.tokens);
-  // const [tokens, setTokens] = useState(props.tokens);
-  // const [unit, setUnit] = useState(unit_init);
-  // console.log(props);
-  // console.log(unit);
-  const [conversionPrices, setConversionPrices] = useState({
-    onePriceInUSD: props.conversionPrices.onePriceInUSD,
-    btcPriceInUSD: props.conversionPrices.btcPriceInUSD,
-  });
-
-  const changeVal = async () => {
+  const { unit } = useContext(UnitContext);
+  const [tokens, setTokens] = useState(tokens_props);
+  const getLatestData = async () => {
     try {
-      const { data } = await axios.get(`/tokens/conversionPrices`);
-      console.log(data);
-      setConversionPrices(data);
-      // setTokens();
-      const temp = convert(tokens, "price", unit, data);
-      setTokens(convert(temp, "marketCap", unit, data));
+      console.log("getLatestData");
+      const { data } = await axios.get(`/tokens/`);
+      const { data: conversionPrices } = await axios.get(
+        `/tokens/conversionPrices`
+      );
+      const tokens = convertPriceAndMarketCap(data, unit, conversionPrices);
+      setTokens(tokens);
     } catch (err) {
-      console.log("err");
       console.log(err);
+      //     //! better error handling
+      //     //! loading
     }
   };
   useEffect(() => {
-    console.log("cahnge");
-    changeVal();
+    getLatestData();
   }, [unit]);
-
-  useEffect(() => {
-    console.log("tokens", tokens);
-  }, [tokens]);
 
   // const [darkMode, setDarkMode] = useState(false);
   // let theme = {};
@@ -86,74 +74,65 @@ export default function Home(props) {
   //     console.log(darkMode);
   //   }, [window]);
   // }
-  // console.log(tokens);
+
   return (
     <>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <ThemeProvider theme={theme}> */}
 
-      {/* <Container maxWidth="lg"> */}
-      {/* <Paper> */}
-      {/* <div className={classes.root}> */}
-      {/* <Switch
-            checked={darkMode}
-            onChange={() => {
-              console.log(darkMode);
-             
-            }}
-          /> */}
-      {/* {typeof window !== "undefined" ? (
-          ) : (
-            <>
-              <Switch
-              checked={darkMode}
-                onChange={() => {
-                  console.log(darkMode);
-                  setDarkMode(!darkMode);
-
-                }}
-              />
-              </>
-          )} */}
       <Grid container justify="center">
         <Grid item xs={10}>
-          {/* <TokenTable socket={socket} tokens={tokens} /> */}
           <TokenTable tokens={tokens} />
         </Grid>
       </Grid>
-      {/* </div> */}
-      {/* </Paper> */}
-      {/* </Container> */}
-      {/* </ThemeProvider> */}
     </>
   );
 }
 
-export async function getServerSideProps(context) {
+Home.getInitialProps = async (context) => {
   try {
-    const { data: tokens } = await axios.get(`/tokens/`);
+    console.log("getINIT_PROPS HOME");
+    // console.log("context.q", context.query);
+    const { data } = await axios.get(`/tokens/`);
     const { data: conversionPrices } = await axios.get(
       `/tokens/conversionPrices`
     );
-    console.log("data", conversionPrices);
-    if (!tokens || !conversionPrices) {
-      return {
-        notFound: true,
-      };
-    }
-    console.log("tokens[0]", tokens[0]);
-    // console.log("tokens[0].cp", tokens[0].marketCap);
-    let temp = convert(tokens, "marketCap", USD, conversionPrices);
-    // const temp = [];
-    temp = convert(tokens, "price", USD, conversionPrices);
-    return {
-      props: { tokens: temp, conversionPrices },
-    };
+    const tokens = convertPriceAndMarketCap(data, USD, conversionPrices);
+    // console.log("tokens DATA", tokens);
+    return { tokens };
   } catch (err) {
     console.log(err);
-    return { props: {} };
+    return {};
   }
-}
+};
+
+// export async function getServerSideProps(context) {
+//   try {
+//     const { data: tokens } = await axios.get(`/tokens/`);
+//     const { data: conversionPrices } = await axios.get(
+//       `/tokens/conversionPrices`
+//     );
+//     console.log("data", conversionPrices);
+//     if (!tokens || !conversionPrices) {
+//       return {
+//         notFound: true,
+//       };
+//     }
+//     // console.log("tokens[0]", tokens[0]);
+//     // console.log("tokens[0].cp", tokens[0].marketCap);
+//     let temp = convertPriceAndMarketCap(tokens, USD, conversionPrices);
+//     // const temp = [];
+//     // temp = convert(tokens, "price", USD, conversionPrices);
+
+//     console.log("a");
+//     return {
+//       props: { tokens: temp, conversionPrices },
+//     };
+//   } catch (err) {
+//     console.log(err);
+//     return { props: {} };
+//   }
+// }
+export default Home;

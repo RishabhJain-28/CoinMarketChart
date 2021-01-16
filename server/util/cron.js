@@ -2,12 +2,14 @@ const cron = require("node-cron");
 const fs = require("fs");
 const main = require("../data/main");
 const Token = require("../models/token");
+const Chart = require("../models/chart");
 
 const axios = require("axios");
+const moment = require("moment");
 
 module.exports = (io) => {
   // return;
-  (async function getUpadtedData() {
+  async function getUpadtedData() {
     const tokens = await Token.find();
     // const [ONE, ONEs, ...tokens] = await Token.find();
 
@@ -60,23 +62,50 @@ module.exports = (io) => {
       data[poolIndex].maxSupply = element.totalSupply;
       data[poolIndex].circulationSupply = element.totalSupply;
     });
+
+    const {
+      data: { price: onePriceInUSD },
+    } = await axios.get(
+      "https://api.binance.com/api/v1/ticker/price?symbol=ONEUSDT"
+    );
+    const {
+      data: { price: btcPriceInUSD },
+    } = await axios.get(
+      "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
+    );
+    console.log("onePriceInUSD in CRON", onePriceInUSD);
+
     data.forEach(async (ele) => {
       //   delete ele.found;
       //   base.push(ele.base);
+      const ONE = ele.price;
+      const USD = onePriceInUSD / ONE;
+      const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
+      const newPrice = new Chart({
+        token: ele._id,
+        time: moment(new Date()).format(),
+        USD,
+        BTC,
+        ONE,
+      });
+      await newPrice.save();
       await ele.save();
     });
     // await data.save();
     io.emit("update", data);
-  });
+  }
+  // getUpadtedData();
   // })();
-  // const task = cron.schedule(
-  //   `*/${process.env.CRON_INTERVAL} * * * *`,
-  //   getUpadtedData,
-  //   {
-  //     scheduled: false,
-  //   }
-  // );
-  // task.start();
+  const task = cron.schedule(
+    `*/${process.env.CRON_INTERVAL} * * * *`,
+    getUpadtedData,
+    {
+      scheduled: false,
+    }
+  );
+  if (process.env.CRON) {
+    task.start();
+  }
 };
 
 // router.get("/BTCUSDT", async (req, res) => {
@@ -93,4 +122,3 @@ module.exports = (io) => {
 //     "https://api.binance.com/api/v1/ticker/24hr?symbol=ONEUSDT"
 //   );
 // }
-

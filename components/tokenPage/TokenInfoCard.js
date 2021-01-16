@@ -3,13 +3,12 @@ import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Title from "./Title";
-
+import toFixed from "../../util/toFixed";
 const useStyles = makeStyles({
   depositContext: {
     flex: 1,
   },
 });
-
 export default function TokenInfoCard({ token }) {
   const classes = useStyles();
   const {
@@ -22,9 +21,10 @@ export default function TokenInfoCard({ token }) {
     maxSupply,
   } = token;
   // console.log("infi card ", token);
-  useEffect(() => {
-    console.log("infi card update", token);
-  }, [token]);
+  // console.log("a");
+  // useEffect(() => {
+  //   console.log("infi card update", token);
+  // }, [token]);
   return (
     <React.Fragment>
       <Title>Current Price:</Title>
@@ -45,7 +45,7 @@ export default function TokenInfoCard({ token }) {
       <Title>Circulation Supply</Title>
       <Typography component="p" variant="body1">
         {/* $3,024.00 */}
-        {circulationSupply}
+        {toFixed(circulationSupply)}
       </Typography>
       <Title>Contract Address</Title>
       <Typography component="p" variant="body1">

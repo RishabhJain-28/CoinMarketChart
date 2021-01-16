@@ -29,12 +29,12 @@ router.get("/data", async (req, res) => {
   res.send(temp.chartData);
   console.log("coomleted");
 });
-
+// ! validation
 // router.get("/data/:start/:end", async (req, res) => {
-router.get("/data/:start/:end/:every", async (req, res) => {
+router.get("/data/:tokenId/:start/:end/:every", async (req, res) => {
   console.log("startd2");
   // const { start, end } = req.params;
-  const { start, end, every } = req.params;
+  const { start, end, every, tokenId } = req.params;
   const step = every / 5;
   console.log("start", start);
   console.log("end", end);
@@ -47,18 +47,18 @@ router.get("/data/:start/:end/:every", async (req, res) => {
   // .format("MMMM Do YYYY, h:mm:ss a");
   // const eShow = e.format("MMMM Do YYYY, h:mm:ss a");
 
-  const id = "5ff12bbe8405ff4e70a04b67";
+  // const id = "5ff12bbe8405ff4e70a04b67";
   // const token = await Token.findById(id).populate("chartData");
   const chartData = await Chart.find({
-    token: id,
+    token: tokenId,
     time: {
       // $and: {
       $lte: end,
       $gte: start,
       // },
     },
-  });
-
+  }).sort("time");
+  console.log("fetched");
   const data = [];
   chartData.forEach((e, i) => {
     if (i % step !== 0) return;
@@ -67,9 +67,9 @@ router.get("/data/:start/:end/:every", async (req, res) => {
 
   // endTime: { $gte: user_date } })
   // const temp = token.toJSON();
-  data.forEach((v) => {
-    console.log(moment(v.time).format("MMMM Do YYYY, h:mm:ss a"));
-  });
+  // data.forEach((v) => {
+  //   console.log(moment(v.time).format("MMMM Do YYYY, h:mm:ss a"));
+  // });
   // console.log("eShow", eShow);
   // console.log("sShow", sShow);
   console.log("coomleted");

@@ -16,18 +16,18 @@ const useStyles = makeStyles((theme) => ({
 function Main(props) {
   const classes = useStyles();
   const { title, displayInfo } = props;
-  console.log(displayInfo);
+  // console.log("displayInfo", displayInfo);
   if (!displayInfo) return null;
   return (
-    <Grid item xs={12} md={8}>
+    <>
       <Typography variant="h6" gutterBottom>
-        {title}
+        {"aaaaaaaaaaaaaaaaaaaaaaa"}
       </Typography>
       <Divider />
       {/* {posts.map((post) => ( */}
-      <Markdown className={classes.markdown}>{displayInfo}</Markdown>
+      {/* <Markdown className={classes.markdown}>{displayInfo}</Markdown> */}
       {/* ))} */}
-    </Grid>
+    </>
   );
 }
 

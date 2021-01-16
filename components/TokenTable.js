@@ -20,6 +20,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoRoundedIcon from "@material-ui/icons/InfoRounded";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
+import toFixed from "../util/toFixed";
 
 import useAsync from "../util/hooks/useAsync";
 import axios from "../util/axios";
@@ -112,6 +113,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     // minWidth: "400px",
     // maxHeight: 440,
+  },
+  pointer: {
+    cursor: "pointer",
   },
   tooltip: {
     padding: "10px 15px",
@@ -235,10 +239,11 @@ export default function TokenTable({ socket, tokens }) {
               {columns.map((column, i) => (
                 <TableCell
                   style={{ color: theme.palette.primary }}
-                  key={i}
+                  key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
                 >
+                  {/* {console.log(column.id)} */}
                   {column.sort ? (
                     <TableSortLabel
                       active={orderBy === column.id}
@@ -286,37 +291,52 @@ export default function TokenTable({ socket, tokens }) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, i) => {
                 return (
-                  <TableRow
-                    onClick={() => router.push(`/token/${row._id}`)}
-                    hover
-                    key={i}
-                  >
+                  <TableRow hover key={row._id}>
+                    {/* {console.log(row._id)} */}
                     {columns.map((column, i) => {
                       let value = row[column.id];
                       // if (column.id === "price") value = row.info.base.price;
                       // console.log(column.id);
                       // console.log(row["info.base.price"]);
                       if (value === undefined) return null;
-                      console.log(`/uploads/${row.image}`);
+                      if (
+                        column.id === "marketCap" ||
+                        column.id === "circulationSupply"
+                      ) {
+                        value = toFixed(value);
+                      }
+                      // console.log(`/uploads/${row.image}`);
                       return (
-                        <>
+                        <TableCell
+                          key={`${column.id}-${row._id}`}
+                          align={column.align}
+                          className={
+                            column.id === "symbol" ? classes.pointer : ""
+                          }
+                          onClick={() => {
+                            if (column.id === "symbol")
+                              router.push(`/token/${row._id}`);
+                          }}
+                        >
                           {column.id === "image" ? (
-                            <TableCell key={row.image} align={column.align}>
-                              <Image
-                                src={`/uploads/${row.image}`}
-                                alt="coin"
-                                layout="intrinsic"
-                                width={100}
-                                height={100}
-                              />
-                            </TableCell>
+                            <Image
+                              onClick={() => {
+                                // if (column.id === "symbol")
+                                router.push(`/token/${row._id}`);
+                              }}
+                              src={`/uploads/${row.image}`}
+                              // style={{ cursor: "pointer" }}
+                              className={classes.pointer}
+                              alt="coin"
+                              layout="intrinsic"
+                              width={100}
+                              height={100}
+                            />
                           ) : (
-                            <TableCell key={i} align={column.align}>
-                              {value}
-                              <a />
-                            </TableCell>
+                            <>{value}</>
                           )}
-                        </>
+                        </TableCell>
+                        // </>
                       );
                     })}
                     {/* </Link> */}

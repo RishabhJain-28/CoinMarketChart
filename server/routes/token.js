@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const axios = require("axios");
-
+const fs = require("fs");
+const path = require("path");
 const upload = require("../config/multerConfig");
 // const upload = require("multer")();
 
@@ -74,10 +75,14 @@ router.get("/:id", async (req, res) => {
   if (!token) return res.statu(400).send({ error: "Invalid token id" });
   console.log("token", token);
   // let [token] = tokens;
+  const filePath = path.resolve(__dirname, "../tokenFiles", token.symbol);
 
+  const displayInfo = fs.readFileSync(filePath);
+  console.log(displayInfo);
   // console.log(token);
   // console.log(token.name);
-  res.json(token);
+  // const a =
+  res.json({ ...token.toJSON(), displayInfo });
 });
 
 // * Add a new token
@@ -97,6 +102,10 @@ router.post("/new", upload.single("image"), async (req, res) => {
     return res
       .status(400)
       .send({ error: "Invalid token body", message: error.details[0].message });
+  const filePath = path.resolve(__dirname, "../tokenFiles", value.symbol);
+  fs.writeFileSync(filePath, value.displayInfo);
+  value.displayInfo = filePath;
+  console.log(filePath);
   const newToken = new Token({ ...value, number: count + 1 }); //! pick
   //! add token validation
   await newToken.save();
@@ -104,5 +113,33 @@ router.post("/new", upload.single("image"), async (req, res) => {
 });
 
 //! implement change password and forget password
+
+router.post(
+  "/newDisplayInfoImage",
+  upload.single("image"),
+  async (req, res) => {
+    //! no imgae upload
+    // const count = await Token.count();
+    // console.log(req.body.newToken);
+    // console.log(req.body);
+    console.log(req.file.filename);
+    // const body = JSON.parse(req.body.newToken);
+    // body.image = req.file.filename.toLowerCase();
+    // // return;
+    // const { value, error } = tokenValidator.newToken(body);
+    // if (error)
+    //   return res
+    //     .status(400)
+    //     .send({ error: "Invalid token body", message: error.details[0].message });
+    // const filePath = path.resolve(__dirname, "../tokenFiles", value.symbol);
+    // fs.writeFileSync(filePath, value.displayInfo);
+    // value.displayInfo = filePath;
+    // console.log(filePath);
+    // const newToken = new Token({ ...value, number: count + 1 }); //! pick
+    // //! add token validation
+    // await newToken.save();
+    res.send({ url: `/uploads/${req.file.filename}`, name: req.file.filename });
+  }
+);
 
 module.exports = router;

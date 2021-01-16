@@ -20,6 +20,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 // import MDEditor from "@uiw/react-md-editor";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import axios from "../../util/axios";
+import Editor from "../../components/Editor/Editor";
 // import dynamic from "next/dynamic";
 import FormLabel from "@material-ui/core/FormLabel";
 
@@ -182,7 +183,7 @@ export default function AddNewToken() {
                   console.log(tempToken);
                 }}
               /> */}
-              <TextareaAutosize
+              {/* <TextareaAutosize
                 className={classes.textareaAutosize}
                 // style={}
                 value={newToken.displayInfo}
@@ -191,6 +192,14 @@ export default function AddNewToken() {
                 aria-label="display-info"
                 rowsMin={30}
                 placeholder="Enter diplay inof here"
+              /> */}
+              <Editor
+                setDisplayInfo={(content) => {
+                  const tempToken = { ...newToken };
+                  tempToken.displayInfo = content;
+                  setNewToken(tempToken);
+                  // console.log(tempToken);
+                }}
               />
             </Grid>
 

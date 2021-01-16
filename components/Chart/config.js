@@ -1,0 +1,52 @@
+export default {
+  hour: {
+    step: 5,
+    scale: "minute",
+    subTime: 1,
+    subUnit: "hours",
+    pointSize: 4,
+    displayValue: "hour",
+  },
+  day: {
+    step: 10,
+    scale: "hour",
+    subTime: 1,
+    subUnit: "days",
+    pointSize: 2.5,
+    displayValue: "day",
+  },
+  "4days": {
+    step: 30,
+    scale: "hour",
+    subTime: 4,
+    subUnit: "days",
+    displayValue: "4 days",
+  },
+  week: {
+    step: 60,
+    scale: "day",
+    subTime: 1,
+    subUnit: "weeks",
+    displayValue: "week",
+  },
+  month: {
+    step: 60 * 3,
+    scale: "day",
+    subTime: 1,
+    subUnit: "months",
+    displayValue: "month",
+  },
+  "3months": {
+    step: 60 * 3 * 3,
+    scale: "week",
+    subTime: 3,
+    subUnit: "months",
+    displayValue: "3 months",
+  },
+  // year: {
+  //   step: 60 * 24 * 2,
+  //   scale: "month",
+  //   subTime: 1,
+  //   subUnit: "year",
+  // },
+};
