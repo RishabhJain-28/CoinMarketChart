@@ -22,10 +22,10 @@ a {
   display: none !important;
 }
 #nprogress .bar {
-  background: purple;
+  background: darkblue !important;
 }
 
 #nprogress .spinner-icon {
-  border-top-color: red;
-  border-left-color: red;
+  border-top-color: darkblue !important;
+  border-left-color: darkblue !important;
 }
