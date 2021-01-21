@@ -21,3 +21,11 @@ a {
 .display-info-viewer .sun-editor .se-resizing-bar {
   display: none !important;
 }
+#nprogress .bar {
+  background: purple;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: red;
+  border-left-color: red;
+}
