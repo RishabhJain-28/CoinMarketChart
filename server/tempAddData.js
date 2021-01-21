@@ -1,5 +1,6 @@
 const moment = require("moment");
 // const Prices = require("./models/Prices");
+// const dates = ["30-Nov-2020", "1-Dec-2020"];
 const values = [
   // 0.005,
   0.005,
@@ -37,40 +38,41 @@ const values = [
   0.00179507,
 ];
 const dates = [
-  " 8-Dec-2020",
-  " 9-Dec-2020",
-  " 10-Dec-2020",
-  " 11-Dec-2020",
-  " 12-Dec-2020",
-  " 13-Dec-2020",
-  " 14-Dec-2020",
-  " 15-Dec-2020",
-  " 16-Dec-2020",
-  " 17-Dec-2020",
-  " 18-Dec-2020",
-  " 19-Dec-2020",
-  " 20-Dec-2020",
-  " 21-Dec-2020",
-  " 22-Dec-2020",
-  " 23-Dec-2020",
-  " 24-Dec-2020",
-  " 25-Dec-2020",
-  " 26-Dec-2020",
-  " 27-Dec-2020",
-  " 28-Dec-2020",
-  " 29-Dec-2020",
-  " 30-Dec-2020",
-  " 31-Dec-2020",
-  " 1-Jan-2021",
-  " 2-Jan-2021",
-  " 3-Jan-2021",
-  " 4-Jan-2021",
-  " 5-Jan-2021",
-  " 6-Jan-2021",
-  " 7-Jan-2021",
-  " 8-Jan-2021",
-  " 9-Jan-2021",
+  "2020-12-08",
+  "2020-12-09",
+  "2020-12-10",
+  "2020-12-11",
+  "2020-12-12",
+  "2020-12-13",
+  "2020-12-14",
+  "2020-12-15",
+  "2020-12-16",
+  "2020-12-17",
+  "2020-12-18",
+  "2020-12-19",
+  "2020-12-20",
+  "2020-12-21",
+  "2020-12-22",
+  "2020-12-23",
+  "2020-12-24",
+  "2020-12-25",
+  "2020-12-26",
+  "2020-12-27",
+  "2020-12-28",
+  "2020-12-29",
+  "2020-12-30",
+  "2020-12-31",
+  "2021-01-01",
+  "2021-01-02",
+  "2021-01-03",
+  "2021-01-04",
+  "2021-01-05",
+  "2021-01-06",
+  "2021-01-07",
+  "2021-01-08",
+  "2021-01-09",
 ];
+
 const USD_PRICES = [
   // 0.984726,
   0.975966,
@@ -107,7 +109,6 @@ const USD_PRICES = [
   2.804031237,
   4.23347836,
 ];
-
 // const d = moment(new Date(dates[0])).format("MMMM Do YYYY, h:mm:ss a");
 // console.log(d);
 
@@ -277,37 +278,6 @@ const BTC_PRICES = {
   "2021-01-10": 38191.55,
 };
 
-// const addDataPoint = async ({ tokenID, price, date }) => {
-//   // const currentDate = moment("2021-01-16" + " " + "23:40");
-//   // console.log("f");
-//   console.log(date);
-
-//   const currentDate = moment(date);
-//   let bucket = await Prices.findOne({
-//     date: currentDate.format("YYYY-MM-D"),
-//   });
-//   if (!bucket) {
-//     bucket = new Prices({
-//       date: currentDate.format("YYYY-MM-D"),
-//       token: tokenID,
-//       // intervals: {},
-//     });
-//   }
-//   // const hour = parseInt(currentDate.format("H"));
-//   const hour = currentDate.format("H");
-//   const minuteNum = parseInt(currentDate.format("m"));
-//   const q = parseInt(minuteNum / 5);
-//   const minute = q * 5;
-//   // console.log("hour", hour);
-//   // console.log("minute", minute);
-//   bucket.intervals[hour][minute] = { ...price };
-//   // console.log(bucket.intervals);
-//   // console.log(bucket.intervals[hour]);
-//   // console.log(bucket.intervals[hour][minute]);
-//   await bucket.save();
-//   console.log(bucket);
-// };
-
 async function a() {
   console.log("start");
   console.log("dates.length", dates.length);
@@ -315,23 +285,54 @@ async function a() {
   console.log("USD_PRICES.length", USD_PRICES.length);
 
   const l = dates.length;
-  console.log(l);
+  // console.log(l);
+
   for (var i = 0; i < l; i++) {
     const date = dates[i];
     // dates.forEach(async (date, i) => {
     // console.log(i);
     //   const date = dates[1];
     //   i = 1;
+
+    // const d = date;
+    // const s = d.split("-");
+    // console.log(s);
+    // const year = parseInt(s[0]);
+    // const month = parseInt(s[1]) - 1;
+    // const day = parseInt(s[2]);
+    // // let z = new Date(year, month, day, 0, 0, 0).toUTCString();
+    // // let z = new Date(year, month, day, 0, 0, 0).toUTCString();
+    // let z = new Date(year, month, day, 1, 0, 0);
+    // // z = z.setUTCHours(0);
+    // // z = z.setUTC(0);
+    // // z = z.setUTCSeconds(0);
+    // // let x = z.getUTCMilliseconds(0);
+    // console.log(moment(z).format("MMMM Do YYYY, h:mm:ss a"));
+    // console.log(z.toUTCString());
+    // console.log(z.getUTCHours());
+    // // console.log(z.toISOString());
+    // console.log(z);
+    // // console.log(moment(z).format("MMMM Do YYYY, h:mm:ss a"));
+    // // console.log(mongo);
+    // // console.log(new Date(moment(z).format()));
+    // // console.log(moment(z).utc().format());
+    // // console.log(new Date(z));
+
+    // continue;
     let start = moment(new Date(date));
     let end;
     if (i === l - 1) end = moment(new Date(date)).add(1, "day");
     else end = moment(new Date(dates[i + 1]));
+    end = end.subtract(1, "minute");
     // console.log(i);
 
     // const now  = moment(start)
     // console.log(start.format("MMMM Do YYYY, h:mm:ss a"));
     // console.log("index", i);
     // console.log("values", values[i]);
+    // const price = 1;
+    // const ONE = price;
+    // const USD = 1;
     const price = values[i];
     const ONE = price;
     const USD = USD_PRICES[i];
@@ -343,24 +344,46 @@ async function a() {
     //   return;
     const tokenID = "5ff12db11725fe681c430a56";
     const priceOBJ = { USD, BTC, ONE };
-    const date_value = start.format("YYYY-MM-DD HH:mm");
+    const date_value = start.format("MMMM Do YYYY, h:mm:ss a");
     console.log(date_value);
-    const currentDate = moment(date_value);
+    // console.log("start: ", date_value);
+    // console.log("END : ", end.format("YYYY-MM-DD HH:mm"));
+    // const printcurrentDate = moment(date_value);
+    const currentDate = new Date(date);
+    // const currentDate = new Date(date)
+    // console.log("CurrentDate", currentDate);
+    // console.log("CurrentDate UTCSTING", currentDate.toUTCString());
 
+    // continue;
     // console.log(start.format("MMMM Do YYYY, h:mm:ss a"));
-
+    // console.log("date", date);
+    // console.log("original new Date(date)", new Date(date));
+    // console.log("original date value", start.format("YYYY-MM-DD HH:mm"));
+    // console.log(printcurrentDate.format("MMMM Do YYYY, h:mm:ss a"));
+    // console.log("currentDate", currentDate.format());
+    // console.log("currentDate new Date", new Date(currentDate.format()));
+    // console.log("currentDate", currentDate.format("YYYY-MM-D"));
     let bucket = await Prices.findOne({
-      date: currentDate.format("YYYY-MM-D"),
+      // date: currentDate.format("YYYY-MM-D"),
+      token: tokenID,
+      date: currentDate,
     });
+
+    // console.log("currentDate", currentDate.format());
     if (!bucket) {
       bucket = new Prices({
-        date: currentDate.format("YYYY-MM-D"),
+        // date: currentDate.format("YYYY-MM-D"),
+        date: currentDate,
         token: tokenID,
         // intervals: {},
       });
     }
 
+    // console.log("bucket currentDate", bucket.date);
+    // continue;
     while (start.isBefore(end)) {
+      // console.log("d::", start.format("YYYY-MM-DD HH:mm"));
+
       const dv = start.format("YYYY-MM-DD HH:mm");
       // console.log(dv);
       const cd = moment(dv);
@@ -377,10 +400,12 @@ async function a() {
       // console.log(bucket.intervals[hour][minute]);
       // await newPrice.save();
       start = start.add(5, "minutes");
+      // console.log("e::", start.isBefore(end));
+
       // console.log(start.format("MMMM Do YYYY, h:mm:ss a"));
     }
     await bucket.save();
-    // console.log(bucket);
+    // console.log(bucket.date);
     // });
   }
   console.log("done");

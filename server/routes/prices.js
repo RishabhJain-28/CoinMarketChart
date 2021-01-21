@@ -37,10 +37,17 @@ router.get("/data/:tokenId/:start/:end/:every", async (req, res) => {
   const { start: s, end: e, every, tokenId } = req.params;
   const step = parseInt(every);
 
-  const start = moment(s).format("YYYY-MM-D");
-  const end = moment(e).format("YYYY-MM-D");
-  //   console.log("start", start);
-  //   console.log("end", end);
+  // const start = moment(s).format("YYYY-MM-D");
+  const start = new Date(s);
+
+  const temp = moment(e).add(1, "day").utc();
+
+  const end = new Date(temp);
+
+  // const start = moment(s).format("YYYY-MM-D");
+  // const end = moment(e).format("YYYY-MM-D");
+  console.log("start", start);
+  console.log("end", end);
   //   console.log("step", step);
   // const e = moment(new Date());
   // const end = e.format();

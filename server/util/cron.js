@@ -96,10 +96,15 @@ module.exports = (io) => {
     // const base = [];
     // console.log(base);
     // console.log("qa");
-    const { data: contractAddressData } = await axios.get(
-      "https://explorer.harmony.one:8888/hrc20-token-list"
-    );
-    // const [/] = contractAddressData
+    let contractAddressData = [];
+    try {
+      const { data } = await axios.get(
+        "https://explorer.harmony.one:8888/hrc20-token-list"
+      );
+      contractAddressData = data;
+    } catch (err) {
+      console.log(err);
+    } // const [/] = contractAddressData
     // console.log(contractAddressData[0]);
     // data.forEach((t) =>console.log(t.))
     const found = [];
@@ -135,59 +140,63 @@ module.exports = (io) => {
     );
     console.log("onePriceInUSD in CRON", onePriceInUSD);
 
+    const d = moment(new Date()).format("YYYY-MM-DD");
+    const currentDate = new Date(d);
+    let start = moment(new Date(d));
+    const date_value = start.format("MMMM Do YYYY, h:mm:ss a");
+    console.log("date_value", date_value);
+    console.log("currentDate", currentDate);
+
+    let cd = moment(new Date());
+    // const cd = new Date.UTC();
+
     const addDataPoint = async (ele) => {
       const ONE = ele.price;
-      const onePriceInUSD = 1;
-      const btcPriceInUSD = 1;
+      // const onePriceInUSD = 1;
+      // const btcPriceInUSD = 1;
       const USD = onePriceInUSD / ONE;
       const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
-      const currentDate = moment(new Date());
+
       let bucket = await Prices.findOne({
-        date: currentDate.format("YYYY-MM-D"),
+        date: currentDate,
+        token: ele._id,
       });
       if (!bucket) {
         bucket = new Prices({
-          date: currentDate.format("YYYY-MM-D"),
+          date: currentDate,
           token: ele._id,
           // intervals: {},
         });
       }
       // const hour = parseInt(currentDate.format("H"));
-      const hour = currentDate.format("H");
-      const minuteNum = parseInt(currentDate.format("m"));
+      const hour = cd.format("H");
+      const minuteNum = parseInt(cd.format("m"));
       const q = parseInt(minuteNum / 5);
       const minute = q * 5;
       console.log("hour", hour);
       console.log("minute", minute);
       bucket.intervals[hour][minute] = { USD, ONE, BTC };
       // console.log(bucket.intervals);
-      console.log(bucket.intervals[hour]);
+      // console.log(bucket.intervals[hour]);
       console.log(bucket.intervals[hour][minute]);
       await bucket.save();
     };
     data.forEach(addDataPoint);
-    // await data.save();
-    io.emit("update", data);
+    data.forEach(async (d, i) => {
+      await d.save();
+      console.log("done", i);
+    });
+    // io.emit("update", data);
+    console.log("done");
   }
   // getUpadtedData();
   // })();
-  // const task = cron.schedule(
-  //   `*/${process.env.CRON_INTERVAL} * * * *`,
-  //   getUpadtedData,
-  //   {
-  //     scheduled: false,
-  //   }
-  // );
-  // if (process.env.CRON) {
-  //   task.start();
-  // }
-
   let minutes = "";
   for (let i = 0; i < 55; i += 5) {
     minutes += `${i},`;
   }
   minutes += `55`;
-  console.log(minutes);
+  // console.log(minutes);
   const task = cron.schedule(`${minutes} * * * *`, getUpadtedData, {
     scheduled: false,
   });
