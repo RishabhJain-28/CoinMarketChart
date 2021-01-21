@@ -12,8 +12,8 @@ const cookieParser = require("cookie-parser");
 const next = require("next");
 const path = require("path");
 const dev = process.env.NODE_ENV !== "production";
-// const nextApp = next({ dev });
-// const handle = nextApp.getRequestHandler();
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
 
 nextApp
   .prepare()
