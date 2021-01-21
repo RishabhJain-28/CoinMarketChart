@@ -50,6 +50,7 @@ const Token = ({ token: token_props, query }) => {
   useEffect(() => {
     getLatestData();
   }, [unit]);
+
   return (
     <>
       <Container maxWidth="lg">
@@ -57,7 +58,7 @@ const Token = ({ token: token_props, query }) => {
         <main>
           <Grid container spacing={4}>
             <Grid item xs={12} md={8}>
-              <Typography variant="h4" gutterBottom>
+              <Typography className={classes.title} variant="h2">
                 {token.name}
               </Typography>
             </Grid>

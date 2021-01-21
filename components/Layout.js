@@ -1,10 +1,14 @@
 import React from "react";
 
 import Navbar from "./Navbar";
-const Layout = ({ children, darkMode, setDarkMode }) => {
+const Layout = ({ isDarkModeSet, children, darkMode, setDarkMode }) => {
   return (
     <>
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+      <Navbar
+        isDarkModeSet={isDarkModeSet}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
       {children}
     </>
   );

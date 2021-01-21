@@ -1,5 +1,5 @@
 import { BTC, ONE, USD } from "./UNITS";
-
+//! marketCAp?
 export default (tokens_data, unit, conversionPrices) => {
   const tokens = [...tokens_data];
   const convertUnit = (value, unit, conversionPrices) => {
@@ -8,7 +8,7 @@ export default (tokens_data, unit, conversionPrices) => {
     else if (unit === BTC) return (onePriceInUSD / value) * btcPriceInUSD;
     else return value;
   };
-  const properties = ["marketCap", "price"];
+  const properties = ["price"];
   tokens.forEach((token) => {
     properties.forEach((property) => {
       if (token[`original_${property}`] === undefined) {

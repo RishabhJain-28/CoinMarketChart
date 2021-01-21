@@ -1,40 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Layout from "../components/Layout";
-import themeOBJ from "../theme/index";
-import useLocalStorage from "../util/hooks/useLocalStorage";
 import { io } from "socket.io-client";
-import Router from "next/router";
-import NProgress from "nprogress"; //nprogress module
-import "nprogress/nprogress.css"; //styles of nprogress
-//Binding events.
-Router.events.on("routeChangeStart", () => NProgress.start());
-Router.events.on("routeChangeComplete", () => NProgress.done());
-Router.events.on("routeChangeError", () => NProgress.done());
-import UnitContext from "../util/context/UnitContext";
-export default function MyApp(props) {
-  const { Component, pageProps } = props;
-  const [darkMode, setDarkMode] = useState(false);
-  const [unit, setUnit] = useState("USD");
-  // const [darkMode, setDarkMode] = useLocalStorage("darkMode", false);
+// import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-  React.useEffect(() => {
-    // Remove the server-side injected CSS.
+import "../styles/globals.css";
+
+import Layout from "../components/Layout";
+import getTheme from "../theme/getTheme";
+import useDarkMode from "../util/hooks/useDarkMode";
+import UnitContext from "../util/context/UnitContext";
+import BindRouterEvents from "../util/BindRouterEvents";
+BindRouterEvents();
+
+export default function MyApp({ Component, pageProps }) {
+  const [unit, setUnit] = useState("USD");
+  const { isDarkModeSet, darkMode, setDarkMode } = useDarkMode();
+  useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-  const theme = createMuiTheme(themeOBJ);
-  const colorMode = createMuiTheme({
-    palette: { type: darkMode ? "dark" : "light" },
-  });
-  // themeOBJ.palette.type = darkMode ? "dark" : "light";
-  // const socket = io("http://localhost:5000");
 
+  const theme = getTheme(darkMode);
+  console.log(theme);
+  // const socket = io("http://localhost:5000");
   return (
     <React.Fragment>
       <Head>
@@ -45,42 +38,21 @@ export default function MyApp(props) {
         />
       </Head>
       <ThemeProvider theme={theme}>
-        <ThemeProvider theme={colorMode}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <UnitContext.Provider value={{ unit, setUnit }}>
-            <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
-              <Component {...pageProps} />
-            </Layout>
-          </UnitContext.Provider>
-        </ThemeProvider>
+        <CssBaseline />
+        <UnitContext.Provider value={{ unit, setUnit }}>
+          <Layout
+            isDarkModeSet={isDarkModeSet}
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+          >
+            <Component {...pageProps} />
+          </Layout>
+        </UnitContext.Provider>
       </ThemeProvider>
     </React.Fragment>
   );
 }
 
-// export async function getServerSideProps(context) {
-//   try {
-
-//     const { data: conversionPrices } = await axios.get(
-//       `/tokens/conversionPrices`
-//     );
-//     // // console.log("data", conversionPrices);
-//     // if ( !conversionPrices) {
-//     //   return {
-//     //     notFound: true,
-//     //   };
-//     // }
-//     console.log("_app", conversionPrices);
-//     // console.log("tokens[0].cp", tokens[0].marketCap);
-//     return {
-//       props: {  conversionPrices ,...context},
-//     };
-//   } catch (err) {
-//     console.log(err);
-//     return { props: {} };
-//   }
-// }
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,

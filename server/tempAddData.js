@@ -1,203 +1,111 @@
 const moment = require("moment");
-const Chart = require("./models/chart");
-
-const dates = [
-  "25-Oct-2020",
-  "30-Oct-2020",
-  "31-Oct-2020",
-  "1-Nov-2020",
-  "2-Nov-2020",
-  "3-Nov-2020",
-  "4-Nov-2020",
-  "5-Nov-2020",
-  "6-Nov-2020",
-  "7-Nov-2020",
-  "8-Nov-2020",
-  "9-Nov-2020",
-  "10-Nov-2020",
-  "11-Nov-2020",
-  "12-Nov-2020",
-  "13-Nov-2020",
-  "14-Nov-2020",
-  "15-Nov-2020",
-  "16-Nov-2020",
-  "17-Nov-2020",
-  "18-Nov-2020",
-  "19-Nov-2020",
-  "20-Nov-2020",
-  "21-Nov-2020",
-  "22-Nov-2020",
-  "23-Nov-2020",
-  "24-Nov-2020",
-  "25-Nov-2020",
-  "26-Nov-2020",
-  "27-Nov-2020",
-  "28-Nov-2020",
-  "29-Nov-2020",
-  "30-Nov-2020",
-  "1-Dec-2020",
-  "2-Dec-2020",
-  "3-Dec-2020",
-  "4-Dec-2020",
-  "5-Dec-2020",
-  "6-Dec-2020",
-  "7-Dec-2020",
-  "8-Dec-2020",
-  "9-Dec-2020",
-  "10-Dec-2020",
-  "11-Dec-2020",
-  "12-Dec-2020",
-  "13-Dec-2020",
-  "14-Dec-2020",
-  "15-Dec-2020",
-  "16-Dec-2020",
-  "17-Dec-2020",
-  "18-Dec-2020",
-  "19-Dec-2020",
-  "20-Dec-2020",
-  "21-Dec-2020",
-  "22-Dec-2020",
-  "23-Dec-2020",
-  "24-Dec-2020",
-  "25-Dec-2020",
-  "26-Dec-2020",
-  "27-Dec-2020",
-  "28-Dec-2020",
-  "29-Dec-2020",
-  "30-Dec-2020",
-  "31-Dec-2020",
-];
+// const Prices = require("./models/Prices");
 const values = [
-  0.0044,
-  0.0014,
-  0.0013,
-  0.0027,
-  0.0018,
-  0.0028,
-  0.00388291,
-  0.00251384,
-  0.00253075,
-  0.00254779,
-  0.00267395,
-  0.00384934,
-  0.00384934,
-  0.00375098,
-  0.00376522,
-  0.00379369,
-  0.00379369,
-  0.00379369,
-  0.00379369,
-  0.00415032,
-  0.0045394,
-  0.0045394,
-  0.0045394,
-  0.0045394,
-  0.0045394,
-  0.0045394,
-  0.00536059,
-  0.00536059,
-  0.00536059,
-  0.00536059,
-  0.00419912,
-  0.00419912,
-  0.00432833,
-  0.00432833,
-  0.00428866,
-  0.00428866,
-  0.00428866,
-  0.00428866,
-  0.00428692,
-  0.00428692,
-  0.00463779,
-  0.0046121,
-  0.0046121,
-  0.00461019,
-  0.00461019,
-  0.00461019,
-  0.00508061,
-  0.00508061,
-  0.00508061,
-  0.00508061,
-  0.00508061,
-  0.00508584,
-  0.00501774,
-  0.00501774,
-  0.00501774,
-  0.00501774,
-  0.00501774,
-  0.00501774,
-  0.00501774,
-  0.00661222,
-  0.00661222,
-  0.00661222,
-  0.00661222,
-  0.00653027,
+  // 0.005,
+  0.005,
+  0.00458933,
+  0.00451646,
+  0.00430902,
+  0.00393835,
+  0.00393835,
+  0.00393835,
+  0.00393835,
+  0.00388806,
+  0.00388806,
+  0.00384407,
+  0.00384407,
+  0.00365519,
+  0.00343872,
+  0.00297149,
+  0.00297149,
+  0.00297149,
+  0.00297149,
+  0.00285716,
+  0.00285716,
+  0.00287811,
+  0.00287811,
+  0.00287811,
+  0.00287286,
+  0.00179618,
+  0.00179618,
+  0.00179618,
+  0.00183312,
+  0.00180044,
+  0.00180044,
+  0.00180044,
+  0.00180044,
+  0.00179507,
 ];
-const ONE_PRICES_USD = [
-  0.0047639,
-  0.0042,
-  0.00421133,
-  0.004871,
-  0.00487051,
-  0.0048,
-  0.00435558,
-  0.00435558,
-  0.00507239,
-  0.00487014,
-  0.00489957,
-  0.0050563,
-  0.00514832,
-  0.00496594,
-  0.0052129,
-  0.00493449,
-  0.00493449,
-  0.00493449,
-  0.00493449,
-  0.00513338,
-  0.00476747,
-  0.0052644,
-  0.00519621,
-  0.00542974,
-  0.00542974,
-  0.00551037,
-  0.00596791,
-  0.00596791,
-  0.00596791,
-  0.00596791,
-  0.00503465,
-  0.00542644,
-  0.00545345,
-  0.00545345,
-  0.00539272,
-  0.00539272,
-  0.00539272,
-  0.00539272,
-  0.00514047,
-  0.00514047,
-  0.00492363,
-  0.00496019,
-  0.00496019,
-  0.00496604,
-  0.00519863,
-  0.00519227,
-  0.00536378,
-  0.00536378,
-  0.00536378,
-  0.00536378,
-  0.00536378,
-  0.00514604,
-  0.00488364,
-  0.00488364,
-  0.00488364,
-  0.00488364,
-  0.00488364,
-  0.00488364,
-  0.00488364,
-  0.00482977,
-  0.00482977,
-  0.00482977,
-  0.00482977,
-  0.00413362,
+const dates = [
+  " 8-Dec-2020",
+  " 9-Dec-2020",
+  " 10-Dec-2020",
+  " 11-Dec-2020",
+  " 12-Dec-2020",
+  " 13-Dec-2020",
+  " 14-Dec-2020",
+  " 15-Dec-2020",
+  " 16-Dec-2020",
+  " 17-Dec-2020",
+  " 18-Dec-2020",
+  " 19-Dec-2020",
+  " 20-Dec-2020",
+  " 21-Dec-2020",
+  " 22-Dec-2020",
+  " 23-Dec-2020",
+  " 24-Dec-2020",
+  " 25-Dec-2020",
+  " 26-Dec-2020",
+  " 27-Dec-2020",
+  " 28-Dec-2020",
+  " 29-Dec-2020",
+  " 30-Dec-2020",
+  " 31-Dec-2020",
+  " 1-Jan-2021",
+  " 2-Jan-2021",
+  " 3-Jan-2021",
+  " 4-Jan-2021",
+  " 5-Jan-2021",
+  " 6-Jan-2021",
+  " 7-Jan-2021",
+  " 8-Jan-2021",
+  " 9-Jan-2021",
+];
+const USD_PRICES = [
+  // 0.984726,
+  0.975966,
+  1.063299,
+  1.107245498,
+  1.145501761,
+  1.320002031,
+  1.362524915,
+  1.362524915,
+  1.362524915,
+  1.380148454,
+  1.376992639,
+  1.339153553,
+  1.339153553,
+  1.388655583,
+  1.446206728,
+  1.770838872,
+  1.770838872,
+  1.770838872,
+  1.770838872,
+  1.632673704,
+  1.632673704,
+  1.656955433,
+  1.617245345,
+  1.617245345,
+  1.439617663,
+  2.38036277,
+  2.38036277,
+  2.38036277,
+  2.641152789,
+  2.804031237,
+  2.804031237,
+  2.804031237,
+  2.804031237,
+  4.23347836,
 ];
 
 // const d = moment(new Date(dates[0])).format("MMMM Do YYYY, h:mm:ss a");
@@ -368,22 +276,49 @@ const BTC_PRICES = {
   "2021-01-09": 40227.8683,
   "2021-01-10": 38191.55,
 };
-// {
-//     "2020-10-01": BTC_PRICES["2020-10-01"],
-//     "2020-10-02": BTC_PRICES["2020-10-02"],
+
+// const addDataPoint = async ({ tokenID, price, date }) => {
+//   // const currentDate = moment("2021-01-16" + " " + "23:40");
+//   // console.log("f");
+//   console.log(date);
+
+//   const currentDate = moment(date);
+//   let bucket = await Prices.findOne({
+//     date: currentDate.format("YYYY-MM-D"),
+//   });
+//   if (!bucket) {
+//     bucket = new Prices({
+//       date: currentDate.format("YYYY-MM-D"),
+//       token: tokenID,
+//       // intervals: {},
+//     });
 //   }
-// Object.keys(BTC_PRICES).forEach((p) => {
-//   var time = "00:00";
-//   let start = moment(new Date(p + " " + time));
-// //   console.log();
-// });
-// console.log(dates.length);
-function a() {
+//   // const hour = parseInt(currentDate.format("H"));
+//   const hour = currentDate.format("H");
+//   const minuteNum = parseInt(currentDate.format("m"));
+//   const q = parseInt(minuteNum / 5);
+//   const minute = q * 5;
+//   // console.log("hour", hour);
+//   // console.log("minute", minute);
+//   bucket.intervals[hour][minute] = { ...price };
+//   // console.log(bucket.intervals);
+//   // console.log(bucket.intervals[hour]);
+//   // console.log(bucket.intervals[hour][minute]);
+//   await bucket.save();
+//   console.log(bucket);
+// };
+
+async function a() {
   console.log("start");
+  console.log("dates.length", dates.length);
+  console.log("values.length", values.length);
+  console.log("USD_PRICES.length", USD_PRICES.length);
 
   const l = dates.length;
-
-  dates.forEach(async (date, i) => {
+  console.log(l);
+  for (var i = 0; i < l; i++) {
+    const date = dates[i];
+    // dates.forEach(async (date, i) => {
     // console.log(i);
     //   const date = dates[1];
     //   i = 1;
@@ -399,25 +334,55 @@ function a() {
     // console.log("values", values[i]);
     const price = values[i];
     const ONE = price;
-    const USD = ONE_PRICES_USD[i] / price;
+    const USD = USD_PRICES[i];
+    // const USD = ONE_PRICES_USD[i] / price;
     const BTC = USD / BTC_PRICES[start.format("YYYY-MM-DD")];
     //   console.log(BTC);
     //   console.log(start.format("YYYY-MM-DD"));
     //   console.log(BTC_PRICES[start.format("YYYY-MM-DD")]);
     //   return;
-    while (start.isBefore(end)) {
-      start = start.add(5, "minutes");
-      console.log(start.format("MMMM Do YYYY, h:mm:ss a"));
-      const newPrice = new Chart({
-        token: "5ff12e1f1725fe681c430a57",
-        time: start.format(),
-        USD,
-        BTC,
-        ONE,
+    const tokenID = "5ff12db11725fe681c430a56";
+    const priceOBJ = { USD, BTC, ONE };
+    const date_value = start.format("YYYY-MM-DD HH:mm");
+    console.log(date_value);
+    const currentDate = moment(date_value);
+
+    // console.log(start.format("MMMM Do YYYY, h:mm:ss a"));
+
+    let bucket = await Prices.findOne({
+      date: currentDate.format("YYYY-MM-D"),
+    });
+    if (!bucket) {
+      bucket = new Prices({
+        date: currentDate.format("YYYY-MM-D"),
+        token: tokenID,
+        // intervals: {},
       });
-      await newPrice.save();
     }
-  });
+
+    while (start.isBefore(end)) {
+      const dv = start.format("YYYY-MM-DD HH:mm");
+      // console.log(dv);
+      const cd = moment(dv);
+      // const hour = parseInt(currentDate.format("H"));
+      const hour = cd.format("H");
+      const minuteNum = parseInt(cd.format("m"));
+      const q = parseInt(minuteNum / 5);
+      const minute = q * 5;
+      // console.log("hour", hour);
+      // console.log("minute", minute);
+      bucket.intervals[hour][minute] = { ...priceOBJ };
+      // console.log(bucket.intervals);
+      // console.log(bucket.intervals[hour]);
+      // console.log(bucket.intervals[hour][minute]);
+      // await newPrice.save();
+      start = start.add(5, "minutes");
+      // console.log(start.format("MMMM Do YYYY, h:mm:ss a"));
+    }
+    await bucket.save();
+    // console.log(bucket);
+    // });
+  }
   console.log("done");
 }
 // a();

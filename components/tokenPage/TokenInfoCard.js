@@ -28,7 +28,7 @@ export default function TokenInfoCard({ token }) {
   return (
     <React.Fragment>
       <Title>Current Price:</Title>
-      <Typography component="p" variant="h4">
+      <Typography component="p" variant="h5">
         {/* $3,024.00 */}
         {price}
       </Typography>

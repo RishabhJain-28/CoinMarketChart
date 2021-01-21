@@ -14,3 +14,10 @@ a {
 * {
   box-sizing: border-box;
 }
+.sun-editor {
+  border: 0px solid black !important;
+}
+
+.display-info-viewer .sun-editor .se-resizing-bar {
+  display: none !important;
+}

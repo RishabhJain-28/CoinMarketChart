@@ -8,6 +8,7 @@ export default makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  intervalButton: { textTransform: "none" },
   width: {
     // height: 100,
     // width: 1000,

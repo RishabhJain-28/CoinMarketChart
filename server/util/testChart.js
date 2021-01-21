@@ -36,3 +36,34 @@ async function a() {
 }
 console.log("c");
 // a();
+
+// const addDataPoint = async (ele) => {
+//   const ONE = ele.price;
+//   const onePriceInUSD = 1;
+//   const btcPriceInUSD = 1;
+//   const USD = onePriceInUSD / ONE;
+//   const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
+//   const currentDate = moment("2021-01-16" + " " + "23:40");
+//   let bucket = await Prices.findOne({
+//     date: currentDate.format("YYYY-MM-D"),
+//   });
+//   if (!bucket) {
+//     bucket = new Prices({
+//       date: currentDate.format("YYYY-MM-D"),
+//       token: ele._id,
+//       // intervals: {},
+//     });
+//   }
+//   // const hour = parseInt(currentDate.format("H"));
+//   const hour = currentDate.format("H");
+//   const minuteNum = parseInt(currentDate.format("m"));
+//   const q = parseInt(minuteNum / 5);
+//   const minute = q * 5;
+//   console.log("hour", hour);
+//   console.log("minute", minute);
+//   bucket.intervals[hour][minute] = { USD, ONE, BTC };
+//   // console.log(bucket.intervals);
+//   console.log(bucket.intervals[hour]);
+//   console.log(bucket.intervals[hour][minute]);
+//   await bucket.save();
+// };

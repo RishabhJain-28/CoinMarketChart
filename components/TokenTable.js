@@ -157,8 +157,8 @@ export default function TokenTable({ socket, tokens }) {
   //   error,
   //   setValue: setTokensData,
   // } = useAsync(() => axios.get("/tokens"), false);
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("number");
 
   const [rows, setRows] = useState(tokens);
 
@@ -299,10 +299,14 @@ export default function TokenTable({ socket, tokens }) {
                       // console.log(column.id);
                       // console.log(row["info.base.price"]);
                       if (value === undefined) return null;
-                      if (
-                        column.id === "marketCap" ||
-                        column.id === "circulationSupply"
-                      ) {
+                      // if (
+                      //   // column.id === "marketCap" ||
+                      //   column.id === "circulationSupply"
+                      // ) {
+                      //   value = toFixed(value);
+                      // }
+                      if (column.id === "marketCap") {
+                        value = row["price"] * row["circulationSupply"];
                         value = toFixed(value);
                       }
                       // console.log(`/uploads/${row.image}`);

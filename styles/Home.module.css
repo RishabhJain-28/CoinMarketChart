@@ -114,6 +114,9 @@
 .logo {
   height: 1em;
 }
+.sun-editor {
+  border: 1px solid black !important;
+}
 
 @media (max-width: 600px) {
   .grid {

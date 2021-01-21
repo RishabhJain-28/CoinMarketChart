@@ -3,11 +3,70 @@ const fs = require("fs");
 const main = require("../data/main");
 const Token = require("../models/token");
 const Chart = require("../models/chart");
+const Prices = require("../models/prices");
 
 const axios = require("axios");
 const moment = require("moment");
 
+// const addDataPoint = async (ele) => {
+//   const ONE = ele.price;
+//   const onePriceInUSD = 1;
+//   const btcPriceInUSD = 1;
+//   const USD = onePriceInUSD / ONE;
+//   const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
+//   const currentDate = moment("2021-01-16" + " " + "23:40");
+//   let bucket = await Prices.findOne({ date: currentDate.format("YYYY-MM-D") });
+//   if (!bucket) {
+//     bucket = new Prices({
+//       date: currentDate.format("YYYY-MM-D"),
+//       token: ele._id,
+//       // intervals: {},
+//     });
+//   }
+//   // const hour = parseInt(currentDate.format("H"));
+//   const hour = currentDate.format("H");
+//   const minuteNum = parseInt(currentDate.format("m"));
+//   const q = parseInt(minuteNum / 5);
+//   const minute = q * 5;
+//   console.log("hour", hour);
+//   console.log("minute", minute);
+//   bucket.intervals[hour][minute] = { USD, ONE, BTC };
+//   // console.log(bucket.intervals);
+//   console.log(bucket.intervals[hour]);
+//   console.log(bucket.intervals[hour][minute]);
+//   await bucket.save();
+// };
+
+//   const newPrice = new Chart({
+//     token: ele._id,
+//     time: moment(new Date()).format(),
+//     USD,
+//     BTC,
+//     ONE,
+//   });
+//   await newPrice.save();
+//   await ele.save();
+// };
+
+// const addDataPoint = async  (ele) => {
+//   //   delete ele.found;
+//   //   base.push(ele.base);
+//   const ONE = ele.price;
+//   const USD = onePriceInUSD / ONE;
+//   const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
+//   const newPrice = new Chart({
+//     token: ele._id,
+//     time: moment(new Date()).format(),
+//     USD,
+//     BTC,
+//     ONE,
+//   });
+//   await newPrice.save();
+//   await ele.save();
+// }
+
 module.exports = (io) => {
+  // addDataPoint({ _id: "5ff12bbe8405ff4e70a04b67", price: 2 });
   // return;
   async function getUpadtedData() {
     const tokens = await Token.find();
@@ -59,7 +118,8 @@ module.exports = (io) => {
       console.log("found", data[poolIndex].symbol);
       data[poolIndex].found = true;
       data[poolIndex].contractAddress = element.contractAddress;
-      data[poolIndex].maxSupply = element.totalSupply;
+      data[poolIndex].maxSupply =
+        element.totalSupply / Math.pow(10, element.decimals);
       data[poolIndex].circulationSupply = element.totalSupply;
     });
 
@@ -75,35 +135,65 @@ module.exports = (io) => {
     );
     console.log("onePriceInUSD in CRON", onePriceInUSD);
 
-    data.forEach(async (ele) => {
-      //   delete ele.found;
-      //   base.push(ele.base);
+    const addDataPoint = async (ele) => {
       const ONE = ele.price;
+      const onePriceInUSD = 1;
+      const btcPriceInUSD = 1;
       const USD = onePriceInUSD / ONE;
       const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
-      const newPrice = new Chart({
-        token: ele._id,
-        time: moment(new Date()).format(),
-        USD,
-        BTC,
-        ONE,
+      const currentDate = moment(new Date());
+      let bucket = await Prices.findOne({
+        date: currentDate.format("YYYY-MM-D"),
       });
-      await newPrice.save();
-      await ele.save();
-    });
+      if (!bucket) {
+        bucket = new Prices({
+          date: currentDate.format("YYYY-MM-D"),
+          token: ele._id,
+          // intervals: {},
+        });
+      }
+      // const hour = parseInt(currentDate.format("H"));
+      const hour = currentDate.format("H");
+      const minuteNum = parseInt(currentDate.format("m"));
+      const q = parseInt(minuteNum / 5);
+      const minute = q * 5;
+      console.log("hour", hour);
+      console.log("minute", minute);
+      bucket.intervals[hour][minute] = { USD, ONE, BTC };
+      // console.log(bucket.intervals);
+      console.log(bucket.intervals[hour]);
+      console.log(bucket.intervals[hour][minute]);
+      await bucket.save();
+    };
+    data.forEach(addDataPoint);
     // await data.save();
     io.emit("update", data);
   }
   // getUpadtedData();
   // })();
-  const task = cron.schedule(
-    `*/${process.env.CRON_INTERVAL} * * * *`,
-    getUpadtedData,
-    {
-      scheduled: false,
-    }
-  );
-  if (process.env.CRON) {
+  // const task = cron.schedule(
+  //   `*/${process.env.CRON_INTERVAL} * * * *`,
+  //   getUpadtedData,
+  //   {
+  //     scheduled: false,
+  //   }
+  // );
+  // if (process.env.CRON) {
+  //   task.start();
+  // }
+
+  let minutes = "";
+  for (let i = 0; i < 55; i += 5) {
+    minutes += `${i},`;
+  }
+  minutes += `55`;
+  console.log(minutes);
+  const task = cron.schedule(`${minutes} * * * *`, getUpadtedData, {
+    scheduled: false,
+  });
+  // console.log(process.env.CRON);
+  if (process.env.CRON === "true") {
+    console.log("task STARTED");
     task.start();
   }
 };

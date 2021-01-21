@@ -73,12 +73,12 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   const token = await Token.findById(id);
   if (!token) return res.statu(400).send({ error: "Invalid token id" });
-  console.log("token", token);
+  // console.log("token", token);
   // let [token] = tokens;
   const filePath = path.resolve(__dirname, "../tokenFiles", token.symbol);
 
   const displayInfo = fs.readFileSync(filePath);
-  console.log(displayInfo);
+  // console.log(displayInfo);
   // console.log(token);
   // console.log(token.name);
   // const a =

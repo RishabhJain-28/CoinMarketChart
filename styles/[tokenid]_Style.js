@@ -5,6 +5,10 @@ export default makeStyles((theme) => ({
   mainGrid: {
     marginTop: theme.spacing(3),
   },
+  title: {
+    paddingTop: "25px",
+    flexGrow: 1,
+  },
   root: {
     display: "flex",
   },
@@ -39,9 +43,9 @@ export default makeStyles((theme) => ({
   menuButtonHidden: {
     display: "none",
   },
-  title: {
-    flexGrow: 1,
-  },
+  // title: {
+
+  // },
   drawerPaper: {
     position: "relative",
     whiteSpace: "nowrap",

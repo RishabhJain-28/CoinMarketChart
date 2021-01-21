@@ -4,6 +4,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -22,22 +26,32 @@ export default function Chart({ tokenId, priceUnit }) {
   const [chartValues, setChartValues] = useState([]);
   useEffect(() => {
     (async function a() {
-      setLoading(true);
-      if (!tokenId) return;
-      const { step, subTime, subUnit } = config[timeUnit];
-      const selected = moment(date).format();
-      const start = moment(date).subtract(subTime, subUnit).format();
-      const { data } = await axios.get(
-        `/chart/data/${tokenId}/${start}/${selected}/${step}`
-      );
-      const temp = data.map((e) => ({ x: e.time, y: e[priceUnit], ...e }));
-      //! error HANDLING
-      //! loadiing
-      //! responsive
-      //! UI - colors and layout
-      setLoading(false);
-      setChartValues(temp);
-      // setLoading(false);
+      try {
+        setLoading(true);
+        if (!tokenId) return;
+        console.log("REQUEST");
+        const { step, subTime, subUnit } = config[timeUnit];
+        const selected = moment(date).format();
+        const start = moment(date).subtract(subTime, subUnit).format();
+        const { data } = await axios.get(
+          `/prices/data/${tokenId}/${start}/${selected}/${step}`
+        );
+        console.log(data);
+        data.forEach((d) => {
+          console.log(moment(d.time).format("MMMM Do YYYY, h:mm:ss a"));
+        });
+        const temp = data.map((e) => ({ x: e.time, y: e[priceUnit], ...e }));
+        //! error HANDLING
+        //! loadiing
+        //! responsive
+        //! UI - colors and layout
+        setLoading(false);
+        // setChartValues(temp);
+        setChartValues(temp);
+        // setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
     })();
   }, [date, timeUnit]);
 
@@ -54,47 +68,73 @@ export default function Chart({ tokenId, priceUnit }) {
   const classes = useStyles();
   const options = getChartOptions(priceUnit, timeUnit);
   // const data = getChartData(priceUnit, timeUnit, tempValues);
-  console.log("chartValues", chartValues);
+  // console.log("chartValues", chartValues);
   const data = getChartData(priceUnit, timeUnit, chartValues);
+  // console.log(chartValues);
+  // return <></>;
   if (loading) return <h3>LOADING...</h3>;
   return (
     <>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
-          format="dd/MM/yyyy"
-          margin="normal"
-          id="date-picker-inline"
-          label="Select Start Date"
-          value={date}
-          onChange={(e) => {
-            console.log(e);
-            setDate(e);
-          }}
-          KeyboardButtonProps={{
-            "aria-label": "change date",
-          }}
-        />
-      </MuiPickersUtilsProvider>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label">Interval</InputLabel>
-        <Select
+      <Grid
+        container
+        direction="column"
+        alignItems="flex-end"
+        justify="space-between"
+      >
+        <Grid xs={12}>
+          <FormControl className={classes.formControl}>
+            {/* <InputLabel id="demo-simple-select-label">Interval</InputLabel> */}
+            {/* <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={timeUnit}
-          onChange={(v) => {
-            console.log(v.target.value);
-            setTimeUnit(v.target.value);
-          }}
-        >
-          {Object.keys(config).map((key) => (
-            <MenuItem key={key} value={key}>
-              {config[key].displayValue}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+         
+        > */}
+            <ButtonGroup
+              // size="small"
+              // color="secondary"
+              aria-label="outlined secondary button group"
+              className={classes.intervalButtonGroup}
+            >
+              {/* <Button>Two</Button>
+          <Button>Three</Button> */}
+              {Object.keys(config).map((key) => (
+                <Button
+                  className={classes.intervalButton}
+                  key={key}
+                  variant={timeUnit === key ? "contained" : ""}
+                  onClick={() => setTimeUnit(key)}
+                >
+                  {config[key].displayValue}
+                </Button>
+              ))}
+            </ButtonGroup>
+            {/* </Select> */}
+          </FormControl>
+        </Grid>
+        <Grid>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              style={{ widht: "50%" }}
+              size="small"
+              disableToolbar
+              variant="inline"
+              format="dd/MM/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              // label="Select Start Date"
+              value={date}
+              onChange={(e) => {
+                console.log(e);
+                setDate(e);
+              }}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </Grid>
+      </Grid>
       <div className={classes.width}>
         <h2>Chart</h2>
         <Line data={data} options={options} />
