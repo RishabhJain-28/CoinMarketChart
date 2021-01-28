@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useCallback } from "react";
 import SunEditor, { buttonList } from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import axios from "../../util/axios";
 // const placeholder = ,{buttonList}
 
 const MyComponent = ({ setDisplayInfo }) => {
+  // console.log("token", newToken);
+  // const handleChange = useCallback(
+  //   (content) => {
+  //     console.log(content);
+  //     console.log("content.length", content.length);
+  //     console.log("token2", token);
+  //     setDisplayInfo(content, token);
+  //   },
+  //   [token]
+  // );
   const handleChange = (content) => {
-    // console.log(content);
+    console.log(content);
+    console.log("content.length", content.length);
     setDisplayInfo(content);
+    // console.log("token2", newToken);
+    // const t = { ...newTok/en };
+    // t.displayInfo = content;
+    // setNewToken(t);
   };
+
   const imageUploadHandler = (xmlHttpRequest, info, core) => {
     console.log(xmlHttpRequest, info, core);
     return `img`;

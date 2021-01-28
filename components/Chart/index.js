@@ -38,7 +38,8 @@ export default function Chart({ tokenId, priceUnit }) {
         );
         console.log(data);
         data.forEach((d) => {
-          console.log(moment(d.time).format("MMMM Do YYYY, h:mm:ss a"));
+          // console.log(moment(d.time).format("MMMM Do YYYY, h:mm:ss a"));
+          console.log(new Date(d.time));
         });
         const temp = data.map((e) => ({ x: e.time, y: e[priceUnit], ...e }));
         //! error HANDLING

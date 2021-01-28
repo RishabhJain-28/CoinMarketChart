@@ -40,6 +40,7 @@ const Token = ({ token: token_props, query }) => {
         `/tokens/conversionPrices`
       );
       const [token] = convertPriceAndMarketCap([data], unit, conversionPrices);
+      console.log(token);
       setToken(token);
     } catch (err) {
       console.log(err);
@@ -73,7 +74,10 @@ const Token = ({ token: token_props, query }) => {
             <Grid container spacing={5} className={classes.mainGrid}>
               <Grid item xs={12} md={8}>
                 <View
-                  content={Buffer.from(token.displayInfo.data).toString()}
+                  token={token}
+                  unit={unit}
+                  // content={Buffer.from(token.displayInfo).toString()}
+                  // content={Buffer.from(token.displayInfo.data).toString()}
                 />
                 {/* <Main
                   displayInfo={"adsdnasdlnlsdkfnlkdnflkasdnkjknasd;fclf;nha"}
@@ -94,9 +98,7 @@ const Token = ({ token: token_props, query }) => {
                 </Paper>
               </Grid>
               <Grid item xs={12} md={8}>
-                <View
-                  content={Buffer.from(token.displayInfo.data).toString()}
-                />
+                {/* <View content={Buffer.from(token.displayInfo).toString()} /> */}
                 {/* <Main displayInfo={token.displayInfo} /> */}
               </Grid>
             </Grid>

@@ -53,6 +53,7 @@ export default function AddNewToken() {
 
   const classes = useStyles();
   const [imageFile, setImageFile] = useState("");
+  const [displayInfo, setDisplayInfo] = useState("");
   const [newToken, setNewToken] = useState({
     address: "",
     symbol: "",
@@ -69,17 +70,26 @@ export default function AddNewToken() {
   };
   const addNewToken = async () => {
     try {
+      //! if no image error
       const formData = new FormData();
       formData.append("image", imageFile, imageFile.name);
       // formData.append("banner", banner);
-      formData.append("newToken", JSON.stringify(newToken));
+      const tempToken = { ...newToken, displayInfo };
+      // console.log("tempToken", tempToken);
+      formData.append("newToken", JSON.stringify(tempToken));
       const { data } = await axios.post("/tokens/new", formData);
       console.log(data);
     } catch (err) {
       console.log(err);
     }
   };
-
+  // const setDisplayInfo = (content, token) => {
+  //   console.log(token);
+  //   const tempToken = { ...token };
+  //   tempToken.displayInfo = content;
+  //   setNewToken(tempToken);
+  //   // console.log(tempToken);
+  // };
   return (
     <Container component="main" maxWidth="sm">
       {/* <CssBaseline /> */}
@@ -194,12 +204,9 @@ export default function AddNewToken() {
                 placeholder="Enter diplay inof here"
               /> */}
               <Editor
-                setDisplayInfo={(content) => {
-                  const tempToken = { ...newToken };
-                  tempToken.displayInfo = content;
-                  setNewToken(tempToken);
-                  // console.log(tempToken);
-                }}
+                setDisplayInfo={setDisplayInfo}
+                // setNewToken={setNewToken}
+                // newToken={newToken}
               />
             </Grid>
 

@@ -1,7 +1,14 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+// const cloudinary = require("cloudinary").v2;
+// const cloudinaryStorage = require("cloudinary-multer");
 
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_URL,
+//   api_key: process.env.CLOUDINARY_API_SECRET,
+//   api_secret: CLOUDINARY_API_KEY,
+// });
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = `./public/uploads`;
@@ -23,6 +30,9 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
+// const storage = cloudinaryStorage({
+//   cloudinary: cloudinary,
+// });
 
 const upload = multer({
   storage,
@@ -41,4 +51,7 @@ function checkFileType(file, cb) {
 
   cb("Error: Images Only!");
 }
+
+// router.get('/upBy/:peroiod',async )
+
 module.exports = upload;

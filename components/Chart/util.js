@@ -47,9 +47,16 @@ export const getChartOptions = (priceUnit, timeUnit) => {
         },
       ],
     },
+    //   tooltips: {
+    //     mode: 'index',
+    //     intersect: false,
+    //   },
+
     tooltips: {
       enabled: true,
-      mode: "single",
+      mode: "index",
+      intersect: false,
+      // mode: "single",
       backgroundColor: "rgba(0,0,0,0.9)",
       titleFontSize: 14,
       titleFontStyle: "bold",
@@ -61,11 +68,16 @@ export const getChartOptions = (priceUnit, timeUnit) => {
       footerFontStyle: "normal",
       footerFontColor: "#FFF",
       cornerRadius: 5,
+      caretSize: 15,
       callbacks: {
         title: function ([tooltipItems], data) {
           return moment(tooltipItems.xLabel).format("MMMM Do YYYY, h:mm a");
         },
       },
+    },
+    hover: {
+      mode: "nearest",
+      intersect: true,
     },
   };
 };

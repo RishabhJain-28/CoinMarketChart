@@ -26,7 +26,7 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   const theme = getTheme(darkMode);
-  console.log(theme);
+  // console.log(theme);
   // const socket = io("http://localhost:5000");
   return (
     <React.Fragment>

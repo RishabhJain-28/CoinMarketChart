@@ -205,6 +205,7 @@ module.exports = (io) => {
     console.log("task STARTED");
     task.start();
   }
+  // getUpadtedData();
 };
 
 // router.get("/BTCUSDT", async (req, res) => {

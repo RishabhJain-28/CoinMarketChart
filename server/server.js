@@ -53,7 +53,7 @@ nextApp
         if (err) return console.log("Connection to MongoDB failed.\n", err);
         console.log("Connected to MongoDB");
         // require("./util/testChart");
-        // require("./tempAddData");
+        require("./tempAddData");
       }
     );
 
