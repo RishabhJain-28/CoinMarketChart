@@ -303,7 +303,7 @@ export default function TokenTable({ socket, tokens }) {
 
                       if (column.id === "marketCap") {
                         value = row["price"] * row["circulationSupply"];
-                        value = toFixed(value);
+                        value = Math.round(toFixed(value));
                       }
                       // console.log(`/uploads/${row.image}`);
                       return (
