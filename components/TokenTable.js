@@ -205,7 +205,7 @@ export default function TokenTable({ socket, tokens }) {
       ) {
         return 1;
       }
-      return 0;
+      return 0; //! fix this
     }
     if (b[orderBy] < a[orderBy]) {
       return -1;
