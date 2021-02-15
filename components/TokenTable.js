@@ -135,7 +135,7 @@ export default function TokenTable({ socket, tokens }) {
   //   error,
   //   setValue: setTokensData,
   // } = useAsync(() => axios.get("/tokens"), false);
-  const [order, setOrder] = useState("asc");
+  const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("marketCap");
 
   const [rows, setRows] = useState(tokens);
@@ -298,6 +298,9 @@ export default function TokenTable({ socket, tokens }) {
                       // ) {
                       //   value = toFixed(value);
                       // }
+
+                      if (column.id === "number") value = i + 1;
+
                       if (column.id === "marketCap") {
                         value = row["price"] * row["circulationSupply"];
                         value = toFixed(value);
