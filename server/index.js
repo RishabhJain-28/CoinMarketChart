@@ -3,6 +3,7 @@ const express = require("express");
 const dev = process.env.NODE_ENV !== "production";
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
+const cors = require("cors");
 
 require("dotenv").config();
 
