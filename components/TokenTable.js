@@ -302,10 +302,10 @@ export default function TokenTable({ socket, tokens }) {
                       if (column.id === "price")
                         if (value > 1)
                           value =
-                            Math.round((label + Number.EPSILON) * 100) / 100;
+                            Math.round((value + Number.EPSILON) * 100) / 100;
                         else
                           value =
-                            Math.round((label + Number.EPSILON) * 1000000) /
+                            Math.round((value + Number.EPSILON) * 1000000) /
                             1000000;
                       if (column.id === "number") value = index + 1;
 
