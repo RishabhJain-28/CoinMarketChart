@@ -7,8 +7,8 @@ export const getChartOptions = (priceUnit, timeUnit) => {
     animation: {
       duration: 0,
     },
-    responsive: true,
-    maintainAspectRatio: false,
+    // responsive: true,
+    // maintainAspectRatio: false,
     scales: {
       xAxes: [
         {
