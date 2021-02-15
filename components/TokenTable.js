@@ -77,27 +77,6 @@ const columns = [
   // },
 ];
 
-// const rows = (function () {
-//   function createData(name, id) {
-//     return {
-//       _id: id,
-//       name,
-//       price: Math.random(),
-//       "24h": Math.random(),
-//       "7d": Math.random(),
-//       marketCap: Math.random(),
-//       volume: Math.random(),
-//       circulatingSupply: Math.random(),
-//       last7Days: Math.random(),
-//     };
-//   }
-
-//   const temp = [];
-//   for (let i = 1; i <= 100; i++) {
-//     temp.push(createData("a", i));
-//   }
-//   return temp;
-// })();
 
 const useStyles = makeStyles((theme) => ({
   root: {

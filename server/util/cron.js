@@ -69,7 +69,7 @@ module.exports = (io) => {
   // addDataPoint({ _id: "5ff12bbe8405ff4e70a04b67", price: 2 });
   // return;
   async function getUpadtedData() {
-    const tokens = await Token.find();
+    const tokens = await Token.find().select("-displayInfo");
     // const [ONE, ONEs, ...tokens] = await Token.find();
 
     // async function getONEUSDT() {
@@ -180,18 +180,30 @@ module.exports = (io) => {
       // console.log(bucket.intervals[hour]);
       console.log(bucket.intervals[hour][minute]);
       await bucket.save();
+      ele.bucket = bucket;
     };
     data.forEach(addDataPoint);
     data.forEach(async (d, i) => {
       await d.save();
       console.log("done", i);
     });
-    // io.emit("update", data);
+    io.emit("update", {
+      tokens: data,
+      conversionPrices: {
+        onePriceInUSD,
+        btcPriceInUSD,
+      },
+    });
     console.log("done");
   }
   // getUpadtedData();
   // })();
   let minutes = "";
+  // for (let i = 0; i < 58; i += 1) {
+  //   minutes += `${i},`;
+  // }
+  // minutes += `58`;
+  // let minutes = "";
   for (let i = 0; i < 55; i += 5) {
     minutes += `${i},`;
   }

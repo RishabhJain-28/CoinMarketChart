@@ -1,12 +1,14 @@
 import moment from "moment";
 import config from "./config";
-
+import { useTheme } from "@material-ui/core/styles";
+import toFixed from "../../util/toFixed";
 export const getChartOptions = (priceUnit, timeUnit) => {
   return {
     animation: {
       duration: 0,
     },
-    // maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       xAxes: [
         {
@@ -37,6 +39,17 @@ export const getChartOptions = (priceUnit, timeUnit) => {
       yAxes: [
         {
           type: "linear",
+          // ticks: {
+          //   // beginAtZero: true,
+          //   userCallback: function (label, index, labels) {
+          //     // when the floored value is the same as the value we have a whole number
+          //     // if (Math.floor(label) === label) {
+          //     //   return label;
+          //     // }
+
+          //     return Math.round((label + Number.EPSILON) * 100) / 100;
+          //   },
+          // },
           gridLines: {
             drawBorder: false,
           },
@@ -83,6 +96,8 @@ export const getChartOptions = (priceUnit, timeUnit) => {
 };
 
 export const getChartData = (priceUnit, timeUnit, chartData) => {
+  const theme = useTheme();
+  // console.log(theme.palette.chartLine);
   return {
     datasets: [
       {
@@ -90,7 +105,11 @@ export const getChartData = (priceUnit, timeUnit, chartData) => {
         fill: false,
         lineTension: 0.1,
         backgroundColor: "rgba(75,192,192,0.4)",
-        borderColor: "rgba(75,192,192,1)",
+        // borderColor: "rgba(75,192,192,1)",
+        // borderColor: "#69FABD",
+        // borderColor: "#1B295E",
+        borderColor: theme.palette.chartLine.main,
+        // borderColor: "#4ab588",
         borderCapStyle: "butt",
         borderDash: [],
         borderDashOffset: 0.0,

@@ -16,6 +16,7 @@ import convertPriceAndMarketCap from "../../util/convertPriceAndMarketCap";
 import { USD, ONE, BTC } from "../../util/UNITS";
 import Chart from "../../components/Chart/index";
 import View from "../../components/Editor/View";
+import { io } from "socket.io-client";
 
 // const useStyles =
 
@@ -51,7 +52,42 @@ const Token = ({ token: token_props, query }) => {
   useEffect(() => {
     getLatestData();
   }, [unit]);
+  useEffect(() => {
+    console.log(query);
+    // if (!token) return;
+    // const socket = io("http://localhost:5000");
+    const socket = io("https://coin-market-chart.herokuapp.com");
+    socket.on("data", (data) => {
+      console.log(data);
+      // setNewData(data);
+    });
+    socket.on("update", (data) => {
+      console.log("update", data);
+      // setNewData(data);
+      // console.log("u", data);
 
+      const t = data.tokens.find((e) => {
+        // console.log("e", e._id);
+        // console.log('e', e._id);
+
+        return e._id === query.tokenId;
+      });
+
+      console.log("t", t);
+
+      const [value] = convertPriceAndMarketCap(
+        [{ ...token, ...t }],
+        unit,
+        data.conversionPrices
+      );
+      // const newToken  =  { ...t,  }
+      setToken(value);
+      // console.log(value);
+      // console.log("token", token);
+    });
+    return () => socket.disconnect();
+    //
+  }, [token]);
   return (
     <>
       <Container maxWidth="lg">
@@ -63,7 +99,9 @@ const Token = ({ token: token_props, query }) => {
                 {token.name}
               </Typography>
             </Grid>
+            {/* <Grid item xs={12} style={{ padding: "5px" }}> */}
             <Grid item xs={12}>
+              {/* <Paper className={classes.chart}> */}
               <Paper className={classes.paper}>
                 {/* <Paper className={fixedHeightPaper}> */}
                 <Chart priceUnit={unit} tokenId={query.tokenId} />
@@ -98,6 +136,12 @@ const Token = ({ token: token_props, query }) => {
                 </Paper>
               </Grid>
               <Grid item xs={12} md={8}>
+                <View
+                  token={token}
+                  unit={unit}
+                  // content={Buffer.from(token.displayInfo).toString()}
+                  // content={Buffer.from(token.displayInfo.data).toString()}
+                />
                 {/* <View content={Buffer.from(token.displayInfo).toString()} /> */}
                 {/* <Main displayInfo={token.displayInfo} /> */}
               </Grid>

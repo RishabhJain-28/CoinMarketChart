@@ -27,7 +27,7 @@ import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import UnitContext from "../util/context/UnitContext";
 import UNITS from "../util/UNITS";
-
+import Image from "next/image";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -149,15 +149,26 @@ export default function PrimarySearchAppBar({
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
+          {/* <Typography
             color="textPrimary"
             className={classes.title}
             variant="h6"
             noWrap
           >
             Coin Market Chart
-          </Typography>
-
+          </Typography> */}
+          <Image
+            // onClick={() => {
+            //   // if (column.id === "symbol")
+            //   router.push(`/token/${row._id}`);
+            // }}
+            src="/logo3.png"
+            // className={classes.pointer}
+            alt="logo"
+            // layout="intrinsic"
+            width={244}
+            height={60}
+          />
           <div className={classes.grow} />
           <FormControl className={classes.formControl}>
             <Select

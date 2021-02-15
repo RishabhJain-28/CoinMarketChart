@@ -87,6 +87,12 @@ export default makeStyles((theme) => ({
     overflow: "auto",
     flexDirection: "column",
   },
+  chart: {
+    padding: theme.spacing(1),
+  },
+  // "spacing-xs-4": {
+  //   padding: theme.spacing(1) '!important',
+  // },
   fixedHeight: {
     height: 240,
   },

@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 
 // const placeholder = ,{buttonList}
 
-const MyComponent = ({ token, unit }) => {
+const View = ({ token, unit }) => {
   //   const handleChange = (content) => {
   // console.log(content);
 
@@ -47,7 +47,7 @@ const MyComponent = ({ token, unit }) => {
   // }, [token]);
 
   const theme = useTheme();
-  console.log(theme.palette.background);
+  // console.log(theme.palette.background);
   return (
     // <div dangerouslySetInnerHTML={{ __html: content }}>
     <Paper className="display-info-viewer">
@@ -73,4 +73,4 @@ const MyComponent = ({ token, unit }) => {
     </Paper>
   );
 };
-export default MyComponent;
+export default View;

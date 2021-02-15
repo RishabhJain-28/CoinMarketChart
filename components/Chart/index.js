@@ -29,7 +29,7 @@ export default function Chart({ tokenId, priceUnit }) {
       try {
         setLoading(true);
         if (!tokenId) return;
-        console.log("REQUEST");
+        // console.log("REQUEST");
         const { step, subTime, subUnit } = config[timeUnit];
         const selected = moment(date).format();
         const start = moment(date).subtract(subTime, subUnit).format();
@@ -39,7 +39,7 @@ export default function Chart({ tokenId, priceUnit }) {
         console.log(data);
         data.forEach((d) => {
           // console.log(moment(d.time).format("MMMM Do YYYY, h:mm:ss a"));
-          console.log(new Date(d.time));
+          // console.log(new Date(d.time));
         });
         const temp = data.map((e) => ({ x: e.time, y: e[priceUnit], ...e }));
         //! error HANDLING
@@ -126,7 +126,7 @@ export default function Chart({ tokenId, priceUnit }) {
               // label="Select Start Date"
               value={date}
               onChange={(e) => {
-                console.log(e);
+                // console.log(e);
                 setDate(e);
               }}
               KeyboardButtonProps={{
@@ -137,7 +137,7 @@ export default function Chart({ tokenId, priceUnit }) {
         </Grid>
       </Grid>
       <div className={classes.width}>
-        <h2>Chart</h2>
+        <h2 className={classes.title}>Chart</h2>
         <Line data={data} options={options} />
       </div>
     </>

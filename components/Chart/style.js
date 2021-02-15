@@ -13,4 +13,7 @@ export default makeStyles((theme) => ({
     // height: 100,
     // width: 1000,
   },
+  title: {
+    paddingLeft: "10px",
+  },
 }));

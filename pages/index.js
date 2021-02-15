@@ -23,10 +23,12 @@ function Home({ tokens: tokens_props }) {
   const classes = useStyles();
   const { unit } = useContext(UnitContext);
   const [tokens, setTokens] = useState(tokens_props);
+  const [newData, setNewData] = useState([]);
   const getLatestData = async () => {
     try {
       console.log("getLatestData");
       const { data } = await axios.get(`/tokens/`);
+      console.log("original ", data);
       const { data: conversionPrices } = await axios.get(
         `/tokens/conversionPrices`
       );
@@ -56,9 +58,26 @@ function Home({ tokens: tokens_props }) {
   //   console.log(darkMode);
   // }, [darkMode]);
   // console.log(darkMode);
-  const socket = io("https://coin-market-chart.herokuapp.com/");
-  // const socket = io("http://localhost:5000");
-  // socket.on("hello", (data) => console.log(data));
+  // const socket = io("https://coin-market-chart.herokuapp.com/");
+  useEffect(() => {
+    const socket = io("https://coin-market-chart.herokuapp.com");
+    socket.on("data", (data) => {
+      console.log(data);
+      // setNewData(data);
+    });
+    socket.on("update", (data) => {
+      console.log("update", data);
+      // setNewData(data);
+      const tokens = convertPriceAndMarketCap(
+        data.tokens,
+        unit,
+        data.conversionPrices
+      );
+      setTokens(tokens);
+    });
+    return () => socket.disconnect();
+    //
+  }, []);
   // socket.on("updateData", (data) => {
   //   console.log(data);
   //   setTokens(data);

@@ -64,6 +64,13 @@ nextApp
     const prices = require("./routes/prices");
 
     // * Routes
+    app.get("/api/socket", (req, res) => {
+      io.emit("data", {
+        a: 1,
+        b: 2,
+      });
+      res.send("done");
+    });
     app.use("/api/tokens", token);
     app.use("/api/user", user);
     app.use("/api/chart", chart);
