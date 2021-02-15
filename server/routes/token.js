@@ -156,7 +156,7 @@ router.get("/:id", async (req, res) => {
 
 // * Add a new token
 //! admin
-
+// ! add name
 router.post("/new", upload.single("image"), async (req, res) => {
   //! no imgae upload
   const count = await Token.count();

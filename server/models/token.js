@@ -2,11 +2,10 @@ const mongoose = require("mongoose");
 
 const tokenSchema = mongoose.Schema(
   {
-    // name: {
-    //   type: String,
-    //   unique: true,
-    //   required: true,
-    // },
+    name: {
+      type: String,
+      required: true,
+    },
     number: {
       type: Number,
       // required: true,
@@ -86,9 +85,9 @@ const tokenSchema = mongoose.Schema(
 // tokenSchema.virtual("domain").get(function () {
 //   return "asnnddj";
 // });
-tokenSchema.virtual("name").get(function () {
-  return this.symbol + "/ONEs";
-});
+// tokenSchema.virtual("name").get(function () {
+//   return this.symbol + "/ONEs";
+// });
 tokenSchema.virtual("marketCap").get(function () {
   return this.circulationSupply * this.price;
 });

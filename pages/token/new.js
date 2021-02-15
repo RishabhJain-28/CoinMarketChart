@@ -68,6 +68,9 @@ export default function AddNewToken() {
     setNewToken(tempToken);
     console.log(tempToken);
   };
+
+  //! adding a name token
+
   const addNewToken = async () => {
     try {
       //! if no image error

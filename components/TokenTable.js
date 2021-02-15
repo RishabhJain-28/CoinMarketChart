@@ -28,7 +28,8 @@ const columns = [
   // { id: "watchlist", minWidth: 10 },
   { id: "number", label: "#", minWidth: 10, sort: true },
   { id: "image", label: "", minWidth: 65 },
-  { id: "symbol", label: "Name", minWidth: 100 },
+  { id: "name", label: "Name", minWidth: 100 },
+  { id: "symbol", label: "Symbol", minWidth: 100 },
   // { id: "contractAddress", label: "Contract Address", minWidth: 100 },
   { id: "price", label: "Price", minWidth: 80, sort: true },
   {
@@ -320,10 +321,12 @@ export default function TokenTable({ socket, tokens }) {
                           key={`${column.id}-${row._id}`}
                           align={column.align}
                           className={
-                            column.id === "symbol" ? classes.pointer : ""
+                            column.id === "symbol" || column.id === "name"
+                              ? classes.pointer
+                              : ""
                           }
                           onClick={() => {
-                            if (column.id === "symbol")
+                            if (column.id === "symbol" || column.id === "name")
                               router.push(`/token/${row._id}`);
                           }}
                         >

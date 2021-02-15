@@ -2,6 +2,7 @@ import { BTC, ONE, USD } from "./UNITS";
 //! marketCAp?
 export default (tokens_data, unit, conversionPrices) => {
   const tokens = [...tokens_data];
+
   const convertUnit = (value, unit, conversionPrices) => {
     const { onePriceInUSD, btcPriceInUSD } = conversionPrices;
     if (unit === USD) return onePriceInUSD / value;
