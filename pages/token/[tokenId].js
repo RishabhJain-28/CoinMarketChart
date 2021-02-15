@@ -20,7 +20,7 @@ import { io } from "socket.io-client";
 
 // const useStyles =
 
-const Token = ({ token: token_props, query }) => {
+const Token = ({ token: token_props, query, URL }) => {
   // console.log(b);
   // const = props;
   const classes = useStyles();
@@ -56,7 +56,7 @@ const Token = ({ token: token_props, query }) => {
     console.log(query);
     // if (!token) return;
     // const socket = io("http://localhost:5000");
-    const socket = io("https://coin-market-chart.herokuapp.com");
+    const socket = io(URL);
     socket.on("data", (data) => {
       console.log(data);
       // setNewData(data);
@@ -180,7 +180,7 @@ Token.getInitialProps = async (context) => {
       `/tokens/conversionPrices`
     );
     const [token] = convertPriceAndMarketCap([data], USD, conversionPrices);
-    return { token, query: context.query };
+    return { token, query: context.query, URL: process.env.URL };
   } catch (err) {
     console.log(err);
     return {};

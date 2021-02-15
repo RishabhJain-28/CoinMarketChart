@@ -19,7 +19,7 @@ import convertPriceAndMarketCap from "../util/convertPriceAndMarketCap";
 
 const useStyles = makeStyles({});
 
-function Home({ tokens: tokens_props }) {
+function Home({ tokens: tokens_props, URL }) {
   const classes = useStyles();
   const { unit } = useContext(UnitContext);
   const [tokens, setTokens] = useState(tokens_props);
@@ -58,9 +58,10 @@ function Home({ tokens: tokens_props }) {
   //   console.log(darkMode);
   // }, [darkMode]);
   // console.log(darkMode);
+
   // const socket = io("https://coin-market-chart.herokuapp.com/");
   useEffect(() => {
-    const socket = io("https://coin-market-chart.herokuapp.com");
+    const socket = io(URL);
     socket.on("data", (data) => {
       console.log(data);
       // setNewData(data);
@@ -111,6 +112,8 @@ function Home({ tokens: tokens_props }) {
 }
 
 Home.getInitialProps = async (context) => {
+  // console.log(process.env.a);
+  // console.log(process.env.URL);
   try {
     console.log("getINIT_PROPS HOME");
     // console.log("context.q", context.query);
@@ -120,7 +123,7 @@ Home.getInitialProps = async (context) => {
     );
     const tokens = convertPriceAndMarketCap(data, USD, conversionPrices);
     // console.log("tokens DATA", tokens);
-    return { tokens };
+    return { tokens, URL: process.env.URL };
   } catch (err) {
     console.log(err);
     return {};
