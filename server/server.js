@@ -87,9 +87,9 @@ module.exports = function (app) {
   // * Production setup
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.resolve(__dirname, "Client", "build")));
-    app.get("/*", function (req, res) {
-      res.sendFile(path.resolve(__dirname, "Client", "build", "index.html"));
-    });
+    // app.get("/*", function (req, res) {
+    //   res.sendFile(path.resolve(__dirname, "Client", "build", "index.html"));
+    // });
     // * Handle unhandled promise exceptions
     process.on("uncaughtException", (err, promise) => {
       console.log(`Error: ${err.message}`);

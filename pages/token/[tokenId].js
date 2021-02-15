@@ -96,7 +96,7 @@ const Token = ({ token: token_props, query, URL }) => {
           <Grid container spacing={4}>
             <Grid item xs={12} md={8}>
               <Typography className={classes.title} variant="h2">
-                {token.name}
+                {token.symbol}/ONEs
               </Typography>
             </Grid>
             {/* <Grid item xs={12} style={{ padding: "5px" }}> */}
