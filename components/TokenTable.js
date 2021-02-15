@@ -282,7 +282,7 @@ export default function TokenTable({ socket, tokens }) {
           <TableBody>
             {stableSort(rows, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, i) => {
+              .map((row, index) => {
                 return (
                   <TableRow hover key={row._id}>
                     {/* {console.log(row._id)} */}
@@ -298,13 +298,22 @@ export default function TokenTable({ socket, tokens }) {
                       // ) {
                       //   value = toFixed(value);
                       // }
-
-                      if (column.id === "number") value = i + 1;
+                      //! fix
+                      if (column.id === "price")
+                        if (value > 1)
+                          value =
+                            Math.round((label + Number.EPSILON) * 100) / 100;
+                        else
+                          value =
+                            Math.round((label + Number.EPSILON) * 1000000) /
+                            1000000;
+                      if (column.id === "number") value = index + 1;
 
                       if (column.id === "marketCap") {
                         value = row["price"] * row["circulationSupply"];
                         value = Math.round(toFixed(value));
                       }
+
                       // console.log(`/uploads/${row.image}`);
                       return (
                         <TableCell
