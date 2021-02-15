@@ -77,7 +77,6 @@ const columns = [
   // },
 ];
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -137,7 +136,7 @@ export default function TokenTable({ socket, tokens }) {
   //   setValue: setTokensData,
   // } = useAsync(() => axios.get("/tokens"), false);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("number");
+  const [orderBy, setOrderBy] = useState("marketCap");
 
   const [rows, setRows] = useState(tokens);
 
@@ -193,6 +192,21 @@ export default function TokenTable({ socket, tokens }) {
     onRequestSort(e, col_id);
   };
   function descendingComparator(a, b, orderBy) {
+    if (orderBy === "marketCap") {
+      if (
+        b["price"] * b["circulationSupply"] <
+        a["price"] * a["circulationSupply"]
+      ) {
+        return -1;
+      }
+      if (
+        b["price"] * b["circulationSupply"] >
+        a["price"] * a["circulationSupply"]
+      ) {
+        return 1;
+      }
+      return 0;
+    }
     if (b[orderBy] < a[orderBy]) {
       return -1;
     }
