@@ -8,66 +8,7 @@ const Prices = require("../models/prices");
 const axios = require("axios");
 const moment = require("moment");
 
-// const addDataPoint = async (ele) => {
-//   const ONE = ele.price;
-//   const onePriceInUSD = 1;
-//   const btcPriceInUSD = 1;
-//   const USD = onePriceInUSD / ONE;
-//   const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
-//   const currentDate = moment("2021-01-16" + " " + "23:40");
-//   let bucket = await Prices.findOne({ date: currentDate.format("YYYY-MM-D") });
-//   if (!bucket) {
-//     bucket = new Prices({
-//       date: currentDate.format("YYYY-MM-D"),
-//       token: ele._id,
-//       // intervals: {},
-//     });
-//   }
-//   // const hour = parseInt(currentDate.format("H"));
-//   const hour = currentDate.format("H");
-//   const minuteNum = parseInt(currentDate.format("m"));
-//   const q = parseInt(minuteNum / 5);
-//   const minute = q * 5;
-//   console.log("hour", hour);
-//   console.log("minute", minute);
-//   bucket.intervals[hour][minute] = { USD, ONE, BTC };
-//   // console.log(bucket.intervals);
-//   console.log(bucket.intervals[hour]);
-//   console.log(bucket.intervals[hour][minute]);
-//   await bucket.save();
-// };
-
-//   const newPrice = new Chart({
-//     token: ele._id,
-//     time: moment(new Date()).format(),
-//     USD,
-//     BTC,
-//     ONE,
-//   });
-//   await newPrice.save();
-//   await ele.save();
-// };
-
-// const addDataPoint = async  (ele) => {
-//   //   delete ele.found;
-//   //   base.push(ele.base);
-//   const ONE = ele.price;
-//   const USD = onePriceInUSD / ONE;
-//   const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
-//   const newPrice = new Chart({
-//     token: ele._id,
-//     time: moment(new Date()).format(),
-//     USD,
-//     BTC,
-//     ONE,
-//   });
-//   await newPrice.save();
-//   await ele.save();
-// }
-
 module.exports = (io) => {
-  // addDataPoint({ _id: "5ff12bbe8405ff4e70a04b67", price: 2 });
-  // return;
   async function getUpadtedData() {
     const tokens = await Token.find().select("-displayInfo");
     // const [ONE, ONEs, ...tokens] = await Token.find();
@@ -230,20 +171,4 @@ module.exports = (io) => {
     console.log("task STARTED");
     task.start();
   }
-  // getUpadtedData();
 };
-
-// router.get("/BTCUSDT", async (req, res) => {
-//   const { data } = await axios.get(
-//     "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
-//   );
-//   console.log(data);
-//   res.send(data);
-//   //! save to db
-// });
-
-// async function getONEUSDT() {
-//   const { data } = await axios.get(
-//     "https://api.binance.com/api/v1/ticker/24hr?symbol=ONEUSDT"
-//   );
-// }

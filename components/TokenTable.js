@@ -22,7 +22,6 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import toFixed from "../util/toFixed";
 
-import useAsync from "../util/hooks/useAsync";
 import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
