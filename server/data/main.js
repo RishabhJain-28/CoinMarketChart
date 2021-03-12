@@ -1,11 +1,11 @@
-const harmony = require("./Harmony");
+const harmonyConfig = require("./harmony");
 const harmonyAPI = "https://api.s0.t.hmny.io/";
 
 async function main(pools) {
   let poolData = [];
   try {
-    await harmony.init(harmonyAPI);
-    if (harmony.isLoaded) poolData = await loadPoolPrices(pools);
+    await harmonyConfig.init(harmonyAPI);
+    if (harmonyConfig.isLoaded) poolData = await loadPoolPrices(pools);
   } catch (err) {
     console.log("err", err);
   }
@@ -14,7 +14,7 @@ async function main(pools) {
 async function loadPoolPrices(pools) {
   const data = [];
   for (address in pools) {
-    const pool = await harmony.getPoolPrice(pools[address]);
+    const pool = await harmonyConfig.getPoolPrice(pools[address]);
     data.push(pool);
   }
   return data;
