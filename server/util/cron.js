@@ -99,7 +99,8 @@ module.exports = (io) => {
     let contractAddressData = [];
     try {
       const { data } = await axios.get(
-        "https://explorer.harmony.one:8888/hrc20-token-list"
+        "https://explorer.hmny.io:8888/hrc20-token-list"
+        // "https://explorer.harmony.one:8888/hrc20-token-list"
       );
       contractAddressData = data;
     } catch (err) {
@@ -108,26 +109,27 @@ module.exports = (io) => {
     // console.log(contractAddressData[0]);
     // data.forEach((t) =>console.log(t.))
     const found = [];
+
     // console.log('re')
     // console.log("re");
-    contractAddressData.forEach((element) => {
-      const poolIndex = data.findIndex(
-        (d) => !d.found && d.symbol === element.symbol
-      );
-      //   console.log("checking\n------------------------");
-      const isFound = found.find((f) => f === element.symbol);
-      //   console.log("checking done \n------------------------");
-      if (poolIndex === -1 || isFound) return;
-      found.push(element.symbol);
-      //   console.log(element.name);
-      console.log("found", data[poolIndex].symbol);
-      data[poolIndex].found = true;
-      data[poolIndex].contractAddress = element.contractAddress;
-      data[poolIndex].maxSupply =
-        element.totalSupply / Math.pow(10, element.decimals);
-      data[poolIndex].circulationSupply = element.totalSupply;
-    });
-
+    // contractAddressData.forEach((element) => {
+    //   const poolIndex = data.findIndex(
+    //     (d) => !d.found && d.symbol === element.symbol
+    //   );
+    //   //   console.log("checking\n------------------------");
+    //   const isFound = found.find((f) => f === element.symbol);
+    //   //   console.log("checking done \n------------------------");
+    //   if (poolIndex === -1 || isFound) return;
+    //   found.push(element.symbol);
+    //   //   console.log(element.name);
+    //   console.log("found", data[poolIndex].symbol);
+    //   data[poolIndex].found = true;
+    //   data[poolIndex].contractAddress = element.contractAddress;
+    //   data[poolIndex].maxSupply =
+    //     element.totalSupply / Math.pow(10, element.decimals);
+    //   data[poolIndex].circulationSupply = element.totalSupply;
+    // });
+    //! change contract address logic->add to token manually
     const {
       data: { price: onePriceInUSD },
     } = await axios.get(
@@ -138,14 +140,25 @@ module.exports = (io) => {
     } = await axios.get(
       "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
     );
-    console.log("onePriceInUSD in CRON", onePriceInUSD);
+    // console.log("onePriceInUSD in CRON", onePriceInUSD);
+
+    //volume
+    function getVolume() {
+      const currentTimestamp = new Date().getTime();
+      // console.log(currentTimestamp);
+      const endTimestamp = currentTimestamp - 1000 * 60 * 60 * 24;
+      // console.log(moment(endTimestamp).format("MMMM Do YYYY, h:mm:ss a"));
+    }
+
+    //vol end
 
     const d = moment(new Date()).format("YYYY-MM-DD");
     const currentDate = new Date(d);
+
     let start = moment(new Date(d));
     const date_value = start.format("MMMM Do YYYY, h:mm:ss a");
-    console.log("date_value", date_value);
-    console.log("currentDate", currentDate);
+    // console.log("date_value", date_value);
+    // console.log("currentDate", currentDate);
 
     let cd = moment(new Date());
     // const cd = new Date.UTC();
@@ -182,32 +195,32 @@ module.exports = (io) => {
       await bucket.save();
       ele.bucket = bucket;
     };
-    data.forEach(addDataPoint);
+    // data.forEach(addDataPoint);
     data.forEach(async (d, i) => {
       await d.save();
       console.log("done", i);
     });
-    io.emit("update", {
-      tokens: data,
-      conversionPrices: {
-        onePriceInUSD,
-        btcPriceInUSD,
-      },
-    });
+    // io.emit("update", {
+    //   tokens: data,
+    //   conversionPrices: {
+    //     onePriceInUSD,
+    //     btcPriceInUSD,
+    //   },
+    // });
     console.log("done");
   }
   // getUpadtedData();
   // })();
   let minutes = "";
-  // for (let i = 0; i < 58; i += 1) {
-  //   minutes += `${i},`;
-  // }
-  // minutes += `58`;
-  // let minutes = "";
-  for (let i = 0; i < 55; i += 5) {
+  for (let i = 0; i < 58; i += 1) {
     minutes += `${i},`;
   }
-  minutes += `55`;
+  minutes += `58`;
+  // let minutes = "";
+  // for (let i = 0; i < 55; i += 5) {
+  //   minutes += `${i},`;
+  // }
+  // minutes += `55`;
   // console.log(minutes);
   const task = cron.schedule(`${minutes} * * * *`, getUpadtedData, {
     scheduled: false,

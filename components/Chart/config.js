@@ -4,7 +4,7 @@ export default {
     scale: "minute",
     subTime: 1,
     subUnit: "hours",
-    pointSize: 4,
+    pointSize: 2.5,
     displayValue: "1h",
   },
   day: {
@@ -12,7 +12,7 @@ export default {
     scale: "hour",
     subTime: 1,
     subUnit: "days",
-    pointSize: 2.5,
+    pointSize: 1.75,
     displayValue: "24h",
   },
   "4days": {

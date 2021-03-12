@@ -251,14 +251,14 @@ export default function AddNewToken() {
               />
             </Grid> */}
           </Grid>
-          {/* <Button
+          <Button
             fullWidth
             variant="contained"
             className={classes.submit}
             onClick={addNewToken}
           >
             Add token
-          </Button> */}
+          </Button>
           {/* <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="#" variant="body2">
