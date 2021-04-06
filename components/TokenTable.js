@@ -315,11 +315,11 @@ export default function TokenTable({ socket, tokens }) {
                       if (column.id === "marketCap") {
                         value = row["price"] * row["circulationSupply"];
                         value = Math.round(toFixed(value));
-                        console.log(
-                          "circulationSupply",
-                          row["name"],
-                          row["circulationSupply"]
-                        );
+                        // console.log(
+                        //   "circulationSupply",
+                        //   row["name"],
+                        //   row["circulationSupply"]
+                        // );
                       }
 
                       // console.log(`/uploads/${row.image}`);

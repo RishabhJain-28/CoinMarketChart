@@ -126,10 +126,12 @@ module.exports = (io) => {
       console.log("found", data[poolIndex].symbol);
       data[poolIndex].found = true;
       data[poolIndex].contractAddress = element.contractAddress;
-      data[poolIndex].maxSupply =
-        element.totalSupply / Math.pow(10, element.decimals);
-      data[poolIndex].circulationSupply =
-        element.totalSupply / Math.pow(10, element.decimals);
+      data[poolIndex].maxSupply = Math.floor(
+        element.totalSupply / Math.pow(10, element.decimals)
+      );
+      data[poolIndex].circulationSupply = Math.floor(
+        element.totalSupply / Math.pow(10, element.decimals)
+      );
     });
 
     const {

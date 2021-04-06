@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   grow: {
     flexGrow: 1,
+    marginBottom: "10px",
   },
   title: {
     // display: "none",
@@ -119,7 +120,7 @@ export default function PrimarySearchAppBar({
           router.push("/");
         }}
       >
-        <IconButton aria-label="home" color="inherit">
+        <IconButton aria-label="home">
           <HomeIcon />
         </IconButton>
         <p>Home</p>
@@ -162,11 +163,11 @@ export default function PrimarySearchAppBar({
             //   // if (column.id === "symbol")
             //   router.push(`/token/${row._id}`);
             // }}
-            src="/logo3.png"
+            src="/logo.png"
             // className={classes.pointer}
             alt="logo"
             // layout="intrinsic"
-            width={244}
+            width={150}
             height={60}
           />
           <div className={classes.grow} />
