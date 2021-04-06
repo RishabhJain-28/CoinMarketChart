@@ -68,6 +68,9 @@ router.get("/", async (req, res) => {
 
   // console.log(token);
   // console.log(token.name);
+  // console.log("a");
+  // console.log(tokens);
+  // tokens.forEach((t) => console.log(t.symbol));
   res.json(tokens);
 });
 

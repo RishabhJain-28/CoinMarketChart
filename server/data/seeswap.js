@@ -42,6 +42,8 @@ function money(amountBN, dec = 2) {
 
 async function getPoolPrice(pool) {
   try {
+    console.log("fetching ", pool.name);
+
     let contract = seeswap.harmony.contracts.createContract(
       seeswap.PoolContract.abi,
       pool.address

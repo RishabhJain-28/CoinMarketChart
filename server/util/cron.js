@@ -92,24 +92,27 @@ module.exports = (io) => {
     });
     const data = await main(mainPool);
     // const data = tokens;
-    console.log("data", data);
+    // console.log("data", data);
+    // data.forEach
     // const base = [];
     // console.log(base);
     // console.log("qa");
     let contractAddressData = [];
     try {
       const { data } = await axios.get(
-        "https://explorer.harmony.one:8888/hrc20-token-list"
+        "https://explorer.hmny.io:8888/hrc20-token-list"
       );
       contractAddressData = data;
     } catch (err) {
-      console.log(err);
+      console.log("explorer ", err);
     } // const [/] = contractAddressData
     // console.log(contractAddressData[0]);
     // data.forEach((t) =>console.log(t.))
     const found = [];
     // console.log('re')
     // console.log("re");
+
+    // console.log(contr);
     contractAddressData.forEach((element) => {
       const poolIndex = data.findIndex(
         (d) => !d.found && d.symbol === element.symbol
@@ -125,7 +128,8 @@ module.exports = (io) => {
       data[poolIndex].contractAddress = element.contractAddress;
       data[poolIndex].maxSupply =
         element.totalSupply / Math.pow(10, element.decimals);
-      data[poolIndex].circulationSupply = element.totalSupply;
+      data[poolIndex].circulationSupply =
+        element.totalSupply / Math.pow(10, element.decimals);
     });
 
     const {

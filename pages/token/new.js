@@ -77,11 +77,13 @@ export default function AddNewToken() {
       const formData = new FormData();
       formData.append("image", imageFile, imageFile.name);
       // formData.append("banner", banner);
-      const tempToken = { ...newToken, displayInfo };
+      const tempToken = { ...newToken, displayInfo, name: newToken.symbol }; //! add a name input
       // console.log("tempToken", tempToken);
+
       formData.append("newToken", JSON.stringify(tempToken));
       const { data } = await axios.post("/tokens/new", formData);
       console.log(data);
+      alert("done");
     } catch (err) {
       console.log(err);
     }
@@ -251,14 +253,14 @@ export default function AddNewToken() {
               />
             </Grid> */}
           </Grid>
-          {/* <Button
+          <Button
             fullWidth
             variant="contained"
             className={classes.submit}
             onClick={addNewToken}
           >
             Add token
-          </Button> */}
+          </Button>
           {/* <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="#" variant="body2">

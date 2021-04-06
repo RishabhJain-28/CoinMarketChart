@@ -125,7 +125,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TokenTable({ socket, tokens }) {
   const router = useRouter();
-
+  // useEffect(()=>{
+  //   console.log(tokens)
+  // })
   const classes = useStyles();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -313,6 +315,11 @@ export default function TokenTable({ socket, tokens }) {
                       if (column.id === "marketCap") {
                         value = row["price"] * row["circulationSupply"];
                         value = Math.round(toFixed(value));
+                        console.log(
+                          "circulationSupply",
+                          row["name"],
+                          row["circulationSupply"]
+                        );
                       }
 
                       // console.log(`/uploads/${row.image}`);
