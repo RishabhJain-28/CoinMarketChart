@@ -92,7 +92,10 @@ const useStyles = makeStyles((theme) => ({
   container: {
     // minWidth: "400px",
     // maxHeight: 440,
+    background:
+      theme.palette.type === "dark" ? theme.palette.background.dark : "white",
   },
+
   pointer: {
     cursor: "pointer",
   },

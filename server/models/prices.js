@@ -55,10 +55,11 @@ const pricesSchema = mongoose.Schema(
     // },
   }
 );
-// pricesSchema.index({type: 1, status: 1})
+pricesSchema.index({ date: 1 }, { unique: true });
 // pricesSchema.index(
 //   // { "date.year": 1, "date.month": 1, "date.day": 1 },
 //   { unique: true }
 // );
+
 const Prices = mongoose.model("prices", pricesSchema);
 module.exports = Prices;

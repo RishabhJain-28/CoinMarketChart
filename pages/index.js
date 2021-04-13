@@ -17,7 +17,12 @@ import { USD } from "../util/UNITS";
 import UnitContext from "../util/context/UnitContext";
 import convertPriceAndMarketCap from "../util/convertPriceAndMarketCap";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles((theme) => ({
+  page: {
+    background:
+      theme.palette.type === "dark" ? theme.palette.background.main : "white",
+  },
+}));
 
 function Home({ tokens: tokens_props, URL }) {
   const classes = useStyles();
@@ -102,7 +107,7 @@ function Home({ tokens: tokens_props, URL }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Grid container justify="center">
+      <Grid className={classes.page} container justify="center">
         <Grid item xs={10}>
           <TokenTable tokens={tokens} />
         </Grid>

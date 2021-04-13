@@ -97,7 +97,7 @@ export const getChartOptions = (priceUnit, timeUnit) => {
 
 export const getChartData = (priceUnit, timeUnit, chartData) => {
   const theme = useTheme();
-  // console.log(theme.palette.chartLine);
+  console.log("theme", theme);
   return {
     datasets: [
       {
@@ -114,12 +114,13 @@ export const getChartData = (priceUnit, timeUnit, chartData) => {
         borderDash: [],
         borderDashOffset: 0.0,
         borderJoinStyle: "miter",
-        pointBorderColor: "rgba(75,192,192,1)",
+        pointBorderColor: theme.palette.chartPoint.main,
         pointBackgroundColor: "#fff",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBackgroundColor: theme.palette.chartPoint.main,
+        // pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderColor: theme.palette.chartPoint.main,
         pointHoverBorderWidth: 2,
         pointRadius: config[timeUnit].pointSize
           ? config[timeUnit].pointSize

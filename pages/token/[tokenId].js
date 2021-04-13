@@ -90,7 +90,7 @@ const Token = ({ token: token_props, query, URL }) => {
   }, [token]);
   return (
     <>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <CssBaseline />
         <main>
           <Grid container spacing={4}>
@@ -109,7 +109,7 @@ const Token = ({ token: token_props, query, URL }) => {
             </Grid>
           </Grid>
           <div className={classes.sectionDesktop}>
-            <Grid container spacing={5} className={classes.mainGrid}>
+            <Grid container spacing={1} className={classes.mainGrid}>
               <Grid item xs={12} md={8}>
                 <View
                   token={token}

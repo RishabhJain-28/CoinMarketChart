@@ -9,6 +9,16 @@ const useStyles = makeStyles({
     flex: 1,
   },
 });
+
+// const Section = ()=>(
+// <>
+// <Title>Current Price:</Title>
+// <Typography component="p" variant="h5">
+//   {price}
+// </Typography>
+
+// )
+
 export default function TokenInfoCard({ token }) {
   const classes = useStyles();
   const {
@@ -28,38 +38,23 @@ export default function TokenInfoCard({ token }) {
   return (
     <React.Fragment>
       <Title>Current Price:</Title>
-      <Typography component="p" variant="h5">
-        {/* $3,024.00 */}
+      {/* <Typography component="p" variant="h5"> */}
+      <Typography component="p" variant="h6">
         {price}
       </Typography>
-      {/* <Title>Contract Address</Title>
-      <Typography component="p" variant="body1">
-        $3,024.00
-        {contractAddress}
-      </Typography> */}
       <Title>Volume</Title>
-      <Typography component="p" variant="body1">
-        {/* $3,024.00 */}
+      {/* <Typography component="p" variant="body1"> */}
+      <Typography component="p" variant="h6">
         {volume}
       </Typography>
       <Title>Circulation Supply</Title>
-      <Typography component="p" variant="body1">
-        {/* $3,024.00 */}
+      <Typography component="p" variant="h6">
         {toFixed(circulationSupply)}
       </Typography>
       <Title>Contract Address</Title>
-      <Typography component="p" variant="body1">
-        {/* $3,024.00 */}
+      <Typography component="p" variant="h6">
         {contractAddress}
       </Typography>
-      {/* <Typography color="textSecondary" className={classes.depositContext}>
-        Last update:
-      </Typography> */}
-      {/* <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div> */}
     </React.Fragment>
   );
 }

@@ -62,6 +62,8 @@ export default function PrimarySearchAppBar({
   darkMode,
   setDarkMode,
 }) {
+  console.log("isDarkModeSet", isDarkModeSet);
+  console.log("darkMode", darkMode);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -150,23 +152,13 @@ export default function PrimarySearchAppBar({
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          {/* <Typography
-            color="textPrimary"
-            className={classes.title}
-            variant="h6"
-            noWrap
-          >
-            Coin Market Chart
-          </Typography> */}
           <Image
-            // onClick={() => {
-            //   // if (column.id === "symbol")
-            //   router.push(`/token/${row._id}`);
-            // }}
-            src="/logo.png"
-            // className={classes.pointer}
+            src={
+              darkMode
+                ? "/coin_spider_logo-dark.png"
+                : "/coin_spider_logo-light.png"
+            }
             alt="logo"
-            // layout="intrinsic"
             width={150}
             height={60}
           />
@@ -179,10 +171,6 @@ export default function PrimarySearchAppBar({
                 console.log(e.target.value);
                 setUnit(e.target.value);
               }}
-              // inputProps={{
-              //   name: "age",
-              //   id: "age-native-simple",
-              // }}
             >
               {Object.keys(UNITS).map((key) => {
                 return (
@@ -194,7 +182,7 @@ export default function PrimarySearchAppBar({
             </Select>
           </FormControl>
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="home">
+            <IconButton aria-label="home" color="inherit">
               <Link href="/" passHref>
                 <HomeIcon>
                   <a />
@@ -205,6 +193,7 @@ export default function PrimarySearchAppBar({
             <IconButton
               onClick={() => setDarkMode(!darkMode)}
               aria-label="show 11 new notifications"
+              color="inherit"
             >
               {isDarkModeSet &&
                 (darkMode ? <Brightness7Icon /> : <Brightness4Icon />)}
@@ -215,7 +204,7 @@ export default function PrimarySearchAppBar({
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              // color="inherit"
+              color="inherit"
             >
               <AccountCircle />
             </IconButton>

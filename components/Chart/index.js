@@ -84,25 +84,15 @@ export default function Chart({ tokenId, priceUnit }) {
       >
         <Grid xs={12}>
           <FormControl className={classes.formControl}>
-            {/* <InputLabel id="demo-simple-select-label">Interval</InputLabel> */}
-            {/* <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={timeUnit}
-         
-        > */}
             <ButtonGroup
-              // size="small"
-              // color="secondary"
               aria-label="outlined secondary button group"
               className={classes.intervalButtonGroup}
             >
-              {/* <Button>Two</Button>
-          <Button>Three</Button> */}
               {Object.keys(config).map((key) => (
                 <Button
                   className={classes.intervalButton}
                   key={key}
+                  // color="secondary"
                   variant={timeUnit === key ? "contained" : ""}
                   onClick={() => setTimeUnit(key)}
                 >
@@ -110,28 +100,56 @@ export default function Chart({ tokenId, priceUnit }) {
                 </Button>
               ))}
             </ButtonGroup>
-            {/* </Select> */}
           </FormControl>
         </Grid>
         <Grid>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
-              style={{ widht: "50%" }}
               size="small"
+              // style={{
+              //   color: "#FF3E18",
+              // }}
               disableToolbar
               variant="inline"
               format="dd/MM/yyyy"
               margin="normal"
               id="date-picker-inline"
-              // label="Select Start Date"
               value={date}
+              // color="secondary"
+              // className={classes.keyboardDatePicker}
               onChange={(e) => {
-                // console.log(e);
                 setDate(e);
               }}
               KeyboardButtonProps={{
                 "aria-label": "change date",
+                // className: classes.keyboardDatePicker,
+                // color: "secondary",
               }}
+              // PopoverProps={{
+              //   className: classes.keyboardDatePicker,
+              //   color: "secondary",
+              // }}
+              // DialogProps={{
+              //   className: classes.keyboardDatePicker,
+              //   color: "secondary",
+              // }}
+              // InputAdornmentProps={{
+              //   className: classes.keyboardDatePicker,
+              //   color: "secondary",
+              // }}
+              // leftArrowButtonProps={{
+              //   className: classes.keyboardDatePicker,
+              //   color: "secondary",
+              // }}
+              // rightArrowButtonProps={{
+              //   className: classes.keyboardDatePicker,
+              //   color: "secondary",
+              // }}
+
+              // TextFieldComponent={{
+              //   className: classes.keyboardDatePicker,
+              //   color: "secondary",
+              // }}
             />
           </MuiPickersUtilsProvider>
         </Grid>
