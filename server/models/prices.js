@@ -35,7 +35,7 @@ const pricesSchema = mongoose.Schema(
     //     // unique: true,
     //   },
     // date: { type: Date, required: true, unique: true },
-    date: { type: Date, required: true },
+    date: { type: Date, required: true, unique: true },
     intervals: {
       ...hours,
       // required: true,
