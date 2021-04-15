@@ -2,20 +2,27 @@ import moment from "moment";
 import config from "./config";
 import { useTheme } from "@material-ui/core/styles";
 import toFixed from "../../util/toFixed";
-export const getChartOptions = (priceUnit, timeUnit) => {
+
+export const getChartOptions = (priceUnit, timeUnit, matches) => {
+  console.log("matches ", matches);
   return {
     animation: {
       duration: 0,
     },
+    // responsive: !mobile,
+    // maintainAspectRatio: mobile,
     // responsive: true,
-    // maintainAspectRatio: false,
+    // maintainAspectRatio: !matches,
+    // maintainAspectRatio: true,
+    maintainAspectRatio: false,
+
     scales: {
       xAxes: [
         {
           type: "time",
           // offset: true,
           time: {
-            // unit: unit,
+            // unit: ti,
             unit: config[timeUnit].scale,
           },
           ticks: {

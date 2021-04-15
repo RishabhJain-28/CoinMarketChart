@@ -29,3 +29,20 @@ a {
   border-top-color: darkblue !important;
   border-left-color: darkblue !important;
 }
+@media screen and (max-width: 1280px) {
+  canvas {
+    width: 100% !important;
+    height: 600px !important;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  canvas {
+    /* width: 100% !important; */
+    height: 700px !important;
+  }
+}
+
+/* canvas {
+  height: 300px !important;
+} */

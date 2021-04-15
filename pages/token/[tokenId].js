@@ -94,7 +94,7 @@ const Token = ({ token: token_props, query, URL }) => {
         <CssBaseline />
         <main>
           <Grid container spacing={4}>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={8} lg={8}>
               <Typography className={classes.title} variant="h2">
                 {token.symbol}/ONEs
               </Typography>

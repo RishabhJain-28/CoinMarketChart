@@ -7,6 +7,7 @@ import Select from "@material-ui/core/Select";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import {
   MuiPickersUtilsProvider,
@@ -20,7 +21,10 @@ import { getChartOptions, getChartData } from "./util";
 import config from "./config";
 
 export default function Chart({ tokenId, priceUnit }) {
-  const [timeUnit, setTimeUnit] = useState("day");
+  const matches = useMediaQuery("(max-width:1280px)");
+  // console.log("media query matches", matches);
+
+  const [timeUnit, setTimeUnit] = useState("3months");
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [chartValues, setChartValues] = useState([]);
@@ -67,7 +71,7 @@ export default function Chart({ tokenId, priceUnit }) {
 
   // { x: newDate, y: 1 },
   const classes = useStyles();
-  const options = getChartOptions(priceUnit, timeUnit);
+  const options = getChartOptions(priceUnit, timeUnit, matches);
   // const data = getChartData(priceUnit, timeUnit, tempValues);
   // console.log("chartValues", chartValues);
   const data = getChartData(priceUnit, timeUnit, chartValues);
@@ -156,7 +160,7 @@ export default function Chart({ tokenId, priceUnit }) {
       </Grid>
       <div className={classes.width}>
         <h2 className={classes.title}>Chart</h2>
-        <Line data={data} options={options} />
+        <Line width={100} height={50} data={data} options={options} />
       </div>
     </>
   );
