@@ -32,6 +32,8 @@ const Prices = require("../models/prices");
 // ! validation
 // router.get("/data/:start/:end", async (req, res) => {
 router.get("/data/:tokenId/:start/:end/:every", async (req, res) => {
+  console.time("dbsave1");
+
   console.log("start PRICES");
   // const { start, end } = req.params;
   const { start: s, end: e, every, tokenId } = req.params;
@@ -68,6 +70,7 @@ router.get("/data/:tokenId/:start/:end/:every", async (req, res) => {
       // },
     },
   }).sort("date");
+  console.timeEnd("dbsave1");
   console.log("chartData.length", chartData.length);
   console.log("fetched");
   console.log("step", step);
@@ -126,6 +129,51 @@ router.get("/data/:tokenId/:start/:end/:every", async (req, res) => {
   // console.log("eShow", eShow);
   // console.log("sShow", sShow);
   console.log("coomleted");
+  res.send(data);
+});
+
+router.get("/data-test/:tokenId", async (req, res) => {
+  console.time("dbsave2");
+  const { tokenId } = req.params;
+
+  console.log("start PRICES2");
+  // const { start, end } = req.params;
+  // const { start: s, end: e, every, tokenId } = req.params;
+  const step = 5;
+
+  const chartData = await Prices.find({ token: tokenId }).sort("date");
+  console.timeEnd("dbsave2");
+  console.log("chartData.length", chartData.length);
+  console.log("fetched");
+  console.log("step", step);
+  const data = [];
+  chartData.forEach((day, i) => {
+    let t = 0;
+    while (t / 60 < 24) {
+      let m = parseInt(t % 60);
+      let h = parseInt(t / 60);
+
+      t += step;
+      let hour, minute;
+      if (m <= 9) minute = `0${m}`;
+      else minute = `${m}`;
+      if (h <= 9) hour = `0${h}`;
+      else hour = `${h}`;
+      const time = `${hour}:${minute}`;
+      if (!day.intervals[h][m].ONE) continue;
+
+      const timeStamp = moment(
+        moment(new Date(day.date)).format("YYYY-MM-DD") + " " + time
+      ).format();
+      data.push({
+        time: timeStamp,
+        ONE: day.intervals[h][m].ONE,
+        BTC: day.intervals[h][m].BTC,
+        USD: day.intervals[h][m].USD,
+      });
+    }
+  });
+  console.log("coomleted 2");
   res.send(data);
 });
 

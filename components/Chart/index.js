@@ -8,6 +8,7 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useQuery } from "react-query";
 
 import {
   MuiPickersUtilsProvider,
@@ -26,40 +27,50 @@ export default function Chart({ tokenId, priceUnit }) {
 
   const [timeUnit, setTimeUnit] = useState("3months");
   const [date, setDate] = useState(new Date());
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [chartValues, setChartValues] = useState([]);
-  useEffect(() => {
-    (async function a() {
-      try {
-        setLoading(true);
-        if (!tokenId) return;
-        // console.log("REQUEST");
-        const { step, subTime, subUnit } = config[timeUnit];
-        const selected = moment(date).format();
-        const start = moment(date).subtract(subTime, subUnit).format();
-        const { data } = await axios.get(
-          `/prices/data/${tokenId}/${start}/${selected}/${step}`
-        );
-        console.log(data);
-        data.forEach((d) => {
-          // console.log(moment(d.time).format("MMMM Do YYYY, h:mm:ss a"));
-          // console.log(new Date(d.time));
-        });
-        const temp = data.map((e) => ({ x: e.time, y: e[priceUnit], ...e }));
-        //! error HANDLING
-        //! loadiing
-        //! responsive
-        //! UI - colors and layout
-        setLoading(false);
-        // setChartValues(temp);
-        setChartValues(temp);
-        // setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, [date, timeUnit]);
+  // const { data, isLoading } = useQuery(
+  //   ["getChartData", tokenId],
+  //   getChartDataQuery
+  // );
 
+  // const getChartDataQuery = () => {
+  //   return axios
+  //     .get(`/prices/data/${tokenId}/${start}/${selected}/${step}`)
+  //     .then((res) => res.data);
+  // };
+  useEffect(() => {
+    tempFETCH();
+  }, [date, timeUnit]);
+  const tempFETCH = async () => {
+    if (!tokenId) return;
+
+    try {
+      setLoading(true);
+      // console.log("REQUEST");
+      const { step, subTime, subUnit } = config[timeUnit];
+      const selected = moment(date).format();
+      const start = moment(date).subtract(subTime, subUnit).format();
+      console.log("get chart data ");
+
+      const { data } = await axios.get(
+        `/prices/data/${tokenId}/${start}/${selected}/${step}`
+      );
+      console.log("cahrt datataaa", data);
+
+      const temp = data.map((e) => ({ x: e.time, y: e[priceUnit], ...e }));
+      //! error HANDLING
+      //! loadiing
+      //! responsive
+      //! UI - colors and layout
+      setLoading(false);
+      // setChartValues(temp);
+      setChartValues(temp);
+      // setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     if (!chartValues) return;
     const temp = chartValues.map((e) => {
@@ -77,7 +88,7 @@ export default function Chart({ tokenId, priceUnit }) {
   const data = getChartData(priceUnit, timeUnit, chartValues);
   // console.log(chartValues);
   // return <></>;
-  if (loading) return <h3>LOADING...</h3>;
+  if (isLoading) return <h3>LOADING...</h3>;
   return (
     <>
       <Grid
@@ -97,6 +108,7 @@ export default function Chart({ tokenId, priceUnit }) {
                   className={classes.intervalButton}
                   key={key}
                   // color="secondary"
+                  size="small"
                   variant={timeUnit === key ? "contained" : ""}
                   onClick={() => setTimeUnit(key)}
                 >

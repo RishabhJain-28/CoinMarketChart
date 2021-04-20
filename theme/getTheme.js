@@ -15,7 +15,6 @@ const lightTheme = createMuiTheme({
     },
     secondary: {
       main: "#FF3E18",
-      // main: "#1E2038",
     },
     chartLine: {
       main: "#FF3E18",
@@ -33,10 +32,8 @@ const darkTheme = createMuiTheme({
     type: "dark",
 
     primary: {
-      // light: "#DC143C",
-      main: "#1E2038",
-      // main: "#FF3E18",
-      // dark: "#e5eb34",
+      // main: "#1E2038",
+      main: "#343334",
     },
 
     secondary: {
@@ -45,10 +42,10 @@ const darkTheme = createMuiTheme({
     chartLine: {
       main: "#FF3E18",
     },
-    background: {
-      // default: "#1E2038",
-      // paper: "#484a61",
-    },
+    // background: {
+    // default: "#1E2038",
+    // paper: "#343647",
+    // },
 
     chartPoint: {
       main: "#00D6CC",

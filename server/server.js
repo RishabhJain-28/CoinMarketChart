@@ -86,6 +86,7 @@ module.exports = function (app) {
 
   // * Production setup
   if (process.env.NODE_ENV === "production") {
+    console.log("production");
     app.use(express.static(path.resolve(__dirname, "Client", "build")));
     // app.get("/*", function (req, res) {
     //   res.sendFile(path.resolve(__dirname, "Client", "build", "index.html"));
@@ -100,4 +101,6 @@ module.exports = function (app) {
       console.log(`Error: ${err.message}`);
     });
   }
+  // const abc = require("./dbShift");
+  // app.get("/zxc", () => abc());
 };

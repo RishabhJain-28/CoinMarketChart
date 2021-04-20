@@ -12,7 +12,7 @@ const tokenSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      // required: true,
+      required: true,
     },
     symbol: {
       type: String,

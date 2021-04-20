@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-// import Link from "next/Link";
 import { useRouter } from "next/router";
-import Image from "next/image";
-
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -20,10 +17,9 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoRoundedIcon from "@material-ui/icons/InfoRounded";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
+
 import toFixed from "../util/toFixed";
 
-import useAsync from "../util/hooks/useAsync";
-import axios from "../util/axios";
 const columns = [
   // { id: "watchlist", minWidth: 10 },
   { id: "number", label: "#", minWidth: 10, sort: true },
@@ -87,16 +83,18 @@ const useStyles = makeStyles((theme) => ({
   },
   menuPaper: {
     boxShadow: theme.shadows[1],
-    // boxShadow: "0.15px 0.15px #888888",
   },
   container: {
-    // minWidth: "400px",
-    // maxHeight: 440,
     background:
       theme.palette.type === "dark" ? theme.palette.background.dark : "white",
   },
 
   pointer: {
+    cursor: "pointer",
+  },
+  image: {
+    width: "50px",
+    height: "50px",
     cursor: "pointer",
   },
   tooltip: {
@@ -128,19 +126,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TokenTable({ socket, tokens }) {
   const router = useRouter();
-  // useEffect(()=>{
-  //   console.log(tokens)
-  // })
+
   const classes = useStyles();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
-  // const {
-  //   execute: getTokens,
-  //   status,
-  //   value: tokensData,
-  //   error,
-  //   setValue: setTokensData,
-  // } = useAsync(() => axios.get("/tokens"), false);
+
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("marketCap");
 
@@ -150,17 +140,6 @@ export default function TokenTable({ socket, tokens }) {
     console.log("token table", tokens);
     setRows(tokens);
   }, [tokens]);
-  // useEffect(() => {
-  //   getTokens();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("setting", status);
-  //   if (status === "success") {
-  //     setRows(tokensData.data);
-  //     console.log(tokensData.data);
-  //   }
-  // }, [status]);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -234,7 +213,6 @@ export default function TokenTable({ socket, tokens }) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {/* <TableSortLabel /> */}
               {columns.map((column, i) => (
                 <TableCell
                   style={{ color: theme.palette.primary }}
@@ -242,7 +220,6 @@ export default function TokenTable({ socket, tokens }) {
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
                 >
-                  {/* {console.log(column.id)} */}
                   {column.sort ? (
                     <TableSortLabel
                       active={orderBy === column.id}
@@ -291,19 +268,13 @@ export default function TokenTable({ socket, tokens }) {
               .map((row, index) => {
                 return (
                   <TableRow hover key={row._id}>
-                    {/* {console.log(row._id)} */}
                     {columns.map((column, i) => {
                       let value = row[column.id];
                       // if (column.id === "price") value = row.info.base.price;
                       // console.log(column.id);
                       // console.log(row["info.base.price"]);
                       if (value === undefined) return null;
-                      // if (
-                      //   // column.id === "marketCap" ||
-                      //   column.id === "circulationSupply"
-                      // ) {
-                      //   value = toFixed(value);
-                      // }
+
                       //! fix
                       if (column.id === "price")
                         if (value > 1)
@@ -318,14 +289,8 @@ export default function TokenTable({ socket, tokens }) {
                       if (column.id === "marketCap") {
                         value = row["price"] * row["circulationSupply"];
                         value = Math.round(toFixed(value));
-                        // console.log(
-                        //   "circulationSupply",
-                        //   row["name"],
-                        //   row["circulationSupply"]
-                        // );
                       }
 
-                      // console.log(`/uploads/${row.image}`);
                       return (
                         <TableCell
                           key={`${column.id}-${row._id}`}
@@ -341,18 +306,13 @@ export default function TokenTable({ socket, tokens }) {
                           }}
                         >
                           {column.id === "image" ? (
-                            <Image
+                            <img
                               onClick={() => {
-                                // if (column.id === "symbol")
                                 router.push(`/token/${row._id}`);
                               }}
-                              src={`/uploads/${row.image}`}
-                              // style={{ cursor: "pointer" }}
-                              className={classes.pointer}
+                              src={row.image}
+                              className={classes.image}
                               alt="coin"
-                              layout="intrinsic"
-                              width={100}
-                              height={100}
                             />
                           ) : (
                             <>{value}</>
@@ -361,31 +321,6 @@ export default function TokenTable({ socket, tokens }) {
                         // </>
                       );
                     })}
-                    {/* </Link> */}
-                    {/* <TableCell align="left">
-                      <IconButton
-                        aria-controls="simple-menu"
-                        aria-haspopup="true"
-                        onClick={handleMenuClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        // keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleMenuClose}
-                        classes={{ paper: classes.menuPaper }}
-                      >
-                        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>
-                          My account
-                        </MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-                      </Menu>
-                     
-                    </TableCell> */}
                   </TableRow>
                 );
               })}
@@ -404,16 +339,3 @@ export default function TokenTable({ socket, tokens }) {
     </Paper>
   );
 }
-
-// export async function getServerSideProps(context) {
-//   console.log(context.socket);
-//   try {
-//     const { data } = await axios.get(`/tokens/`);
-//     return {
-//       props: { tokens: data }, // will be passed to the page component as props
-//     };
-//   } catch (err) {
-//     console.log(err);
-//     return { props: {} };
-//   }
-// }

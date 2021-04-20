@@ -62,8 +62,6 @@ export default function PrimarySearchAppBar({
   darkMode,
   setDarkMode,
 }) {
-  console.log("isDarkModeSet", isDarkModeSet);
-  console.log("darkMode", darkMode);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);

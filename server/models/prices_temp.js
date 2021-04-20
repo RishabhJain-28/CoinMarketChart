@@ -23,7 +23,7 @@ for (let i = 0; i < 24; i += 1) {
   hours[i] = { ...minutes };
 }
 
-const pricesSchema = mongoose.Schema(
+const pricesTempSchema = mongoose.Schema(
   {
     //   date: {
     //     type: {
@@ -55,12 +55,8 @@ const pricesSchema = mongoose.Schema(
     // },
   }
 );
-// pricesSchema.index({ date: 1 }, { unique: true });
-// pricesSchema.index(
-//   // { "date.year": 1, "date.month": 1, "date.day": 1 },
-//   { unique: true }
-// );
-pricesSchema.index({ date: 1, token: 1 }, { unique: true });
+// pricesTempSchema.index({ date: 1 }, { unique: true });
+pricesTempSchema.index({ date: 1, token: 1 }, { unique: true });
 
-const Prices = mongoose.model("prices", pricesSchema);
-module.exports = Prices;
+const PricesTemp = mongoose.model("pricesTemp", pricesTempSchema);
+module.exports = PricesTemp;

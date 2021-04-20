@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -14,6 +14,8 @@ import useDarkMode from "../util/hooks/useDarkMode";
 import UnitContext from "../util/context/UnitContext";
 import BindRouterEvents from "../util/BindRouterEvents";
 BindRouterEvents();
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function MyApp({ Component, pageProps }) {
   const [unit, setUnit] = useState("USD");
@@ -24,7 +26,10 @@ export default function MyApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-
+  const queryClientRef = useRef();
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient();
+  }
   const theme = getTheme(darkMode);
   // console.log(theme);
   // const socket = io("http://localhost:5000");
@@ -39,15 +44,18 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <UnitContext.Provider value={{ unit, setUnit }}>
-          <Layout
-            isDarkModeSet={isDarkModeSet}
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-          >
-            <Component {...pageProps} />
-          </Layout>
-        </UnitContext.Provider>
+        <QueryClientProvider client={queryClientRef.current}>
+          <UnitContext.Provider value={{ unit, setUnit }}>
+            <Layout
+              isDarkModeSet={isDarkModeSet}
+              darkMode={darkMode}
+              setDarkMode={setDarkMode}
+            >
+              <Component {...pageProps} />
+            </Layout>
+          </UnitContext.Provider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </ThemeProvider>
     </React.Fragment>
   );

@@ -4,7 +4,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import axios from "../../util/axios";
 // const placeholder = ,{buttonList}
 
-const MyComponent = ({ setDisplayInfo }) => {
+const MyComponent = ({ setDisplayInfo, displayInfo }) => {
   // console.log("token", newToken);
   // const handleChange = useCallback(
   //   (content) => {
@@ -34,11 +34,8 @@ const MyComponent = ({ setDisplayInfo }) => {
       const [imageFile] = files;
       const formData = new FormData();
       formData.append("image", imageFile, imageFile.name);
-      const { data } = await axios.post(
-        "/tokens/newDisplayInfoImage",
-        formData
-      );
-      // console.log(data);
+      const { data } = await axios.post("/tokens/imageUpload", formData);
+      console.log("UPOADdata", data);
       uploadHandler({
         // "errorMessage": "insert error message",
         result: [{ url: data.url, name: data.name, size: "999" }],
@@ -85,6 +82,7 @@ const MyComponent = ({ setDisplayInfo }) => {
     <div>
       <p> My Other Contents </p>
       <SunEditor
+        setContents={displayInfo}
         onImageUploadBefore={handleImageUploadBefore}
         onImageUpload={handleImageUpload}
         // imageUploadHandler={imageUploadHandler}

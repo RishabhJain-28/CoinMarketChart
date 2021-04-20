@@ -1,60 +1,30 @@
-import React, { useEffect } from "react";
-import Link from "@material-ui/core/Link";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Title from "./Title";
 import toFixed from "../../util/toFixed";
-const useStyles = makeStyles({
-  depositContext: {
-    flex: 1,
-  },
-});
-
-// const Section = ()=>(
-// <>
-// <Title>Current Price:</Title>
-// <Typography component="p" variant="h5">
-//   {price}
-// </Typography>
-
-// )
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 export default function TokenInfoCard({ token }) {
-  const classes = useStyles();
-  const {
-    price,
-    marketCap,
-    volume,
-    DEX,
-    contractAddress,
-    circulationSupply,
-    maxSupply,
-  } = token;
-  // console.log("infi card ", token);
-  // console.log("a");
-  // useEffect(() => {
-  //   console.log("infi card update", token);
-  // }, [token]);
+  const matches = useMediaQuery("(max-width:960px)");
+  const { price, volume, contractAddress, circulationSupply } = token;
+
+  const StyledTypography = ({ children, ...props }) => {
+    return (
+      <Typography component="p" variant={matches ? "h6" : "body1"} {...props}>
+        {children}
+      </Typography>
+    );
+  };
   return (
     <React.Fragment>
       <Title>Current Price:</Title>
-      {/* <Typography component="p" variant="h5"> */}
-      <Typography component="p" variant="h6">
-        {price}
-      </Typography>
+      <StyledTypography>{price}</StyledTypography>
       <Title>Volume</Title>
-      {/* <Typography component="p" variant="body1"> */}
-      <Typography component="p" variant="h6">
-        {volume}
-      </Typography>
+      <StyledTypography>{volume}</StyledTypography>
       <Title>Circulation Supply</Title>
-      <Typography component="p" variant="h6">
-        {toFixed(circulationSupply)}
-      </Typography>
+      <StyledTypography>{toFixed(circulationSupply)}</StyledTypography>
       <Title>Contract Address</Title>
-      <Typography component="p" variant="h6">
-        {contractAddress}
-      </Typography>
+      <StyledTypography>{contractAddress}</StyledTypography>
     </React.Fragment>
   );
 }

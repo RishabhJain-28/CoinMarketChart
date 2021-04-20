@@ -19,11 +19,12 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 // import MDEditor from "@uiw/react-md-editor";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import axios from "../../util/axios";
-import Editor from "../../components/Editor/Editor";
+import axios from "../../../util/axios";
+import Editor from "../../../components/Editor/Editor";
 // import dynamic from "next/dynamic";
 import FormLabel from "@material-ui/core/FormLabel";
-
+import { useRouter } from "next/router";
+import { pick } from "lodash";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -48,59 +49,75 @@ const useStyles = makeStyles((theme) => ({
   textareaAutosize: { width: "100%", maxWidth: "100%" },
 }));
 
-export default function AddNewToken() {
-  // const MDEditor = dynamic(import("@uiw/react-md-editor"));
+export default function EditToken() {
+  const router = useRouter();
+  console.log("router", router.query.tokenId);
 
   const classes = useStyles();
-  // const [imageFile, setImageFile] = useState("");
+  const [tokenId, setTokenId] = useState("");
+
   const [displayInfo, setDisplayInfo] = useState("");
-  const [newToken, setNewToken] = useState({
+  const [token, setToken] = useState({
     address: "",
     symbol: "",
     name: "",
     image: "",
     tokenAddress: "",
-
     DEX: "",
   });
 
+  const getLatestData = async (tokenId) => {
+    try {
+      console.log("getLatestData");
+      const { data } = await axios.get(`/tokens/${tokenId}`);
+
+      setToken(pick(data, Object.keys(token)));
+      setDisplayInfo(data.displayInfo);
+    } catch (err) {
+      console.log(err);
+      //     //! better error handling
+      //     //! loading
+    }
+  };
+  useEffect(() => {
+    getLatestData(tokenId);
+  }, [tokenId]);
+
+  useEffect(() => {
+    if (!router?.query?.tokenId) return;
+    setTokenId(router.query.tokenId);
+  }, [router]);
+
   const handleChange = (e) => {
-    const tempToken = { ...newToken };
+    const tempToken = { ...token };
     tempToken[e.target.name] = e.target.value;
-    setNewToken(tempToken);
+    setToken(tempToken);
   };
 
   //! adding a name token
 
   const uploadImage = async (imageFile) => {
     try {
-      // const [imageFile] = files;
       const formData = new FormData();
       formData.append("image", imageFile, imageFile.name);
       const { data } = await axios.post("/tokens/imageUpload", formData);
       console.log("UPOADdata", data);
-      const tempToken = { ...newToken, image: data.url };
+      const tempToken = { ...token, image: data.url };
 
-      setNewToken(tempToken);
-      // console.log(tempToken);
+      setToken(tempToken);
     } catch (err) {
       console.log(err); //! better error handling
-      // uploadHandler({
-      //   errorMessage: "insert error message",
-      // });
     }
   };
 
-  const addNewToken = async () => {
+  const saveToken = async () => {
     try {
+      if (!tokenId) return;
       //! if no image error
 
-      if (!newToken.image) return alert("token img req");
-
-      if (!"") console.log("trueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-      const tempToken = { ...newToken, displayInfo }; //! add a name input
-      const { data } = await axios.post("/tokens/new", tempToken);
-      console.log("dataaaaaaa", data);
+      if (!token.image) return alert("token img req");
+      const tempToken = { ...token, displayInfo }; //! add a name input
+      const { data } = await axios.put(`/tokens/edit/${tokenId}`, tempToken);
       alert("done");
     } catch (err) {
       console.log(err);
@@ -114,13 +131,13 @@ export default function AddNewToken() {
           <AddIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Add a new token
+          Edit token
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            {newToken.image && (
+            {token.image && (
               <Grid item xs={12}>
-                <img id="tokenPreviewImg" src={newToken.image} />
+                <img id="IMAGE TEST ID" src={token.image} />
               </Grid>
             )}
             <Grid item xs={12}>
@@ -129,13 +146,11 @@ export default function AddNewToken() {
                   accept="image/*"
                   className={classes.input}
                   id="contained-button-file"
-                  // value={imageFile}
                   type="file"
                   onChange={(e) => {
                     console.log(e.target.files[0]);
 
                     uploadImage(e.target.files[0]);
-                    // setImageFile(e.target.files[0]);
                   }}
                 />
                 <label htmlFor="contained-button-file">
@@ -151,7 +166,7 @@ export default function AddNewToken() {
                 <Input
                   id="pool-address"
                   name="address"
-                  value={newToken.address}
+                  value={token.address}
                   onChange={handleChange}
                   aria-describedby="pool-address-text"
                 />
@@ -160,20 +175,15 @@ export default function AddNewToken() {
                 </FormHelperText>
               </FormControl>
             </Grid>
-            {/* <Grid container spacing={2}> */}
             <Grid item xs={12}>
               <FormControl fullWidth required>
                 <InputLabel htmlFor="token-symbol">Token Symbol</InputLabel>
                 <Input
                   id="token-symbol"
                   name="symbol"
-                  value={newToken.symbol}
+                  value={token.symbol}
                   onChange={handleChange}
-                  // aria-describedby="token-symbol-text"
                 />
-                {/* <FormHelperText id="token-symbol-text">
-                  The symbol of the pool
-                </FormHelperText> */}
               </FormControl>
             </Grid>{" "}
             <Grid item xs={12}>
@@ -182,13 +192,9 @@ export default function AddNewToken() {
                 <Input
                   id="token-symbol"
                   name="name"
-                  value={newToken.name}
+                  value={token.name}
                   onChange={handleChange}
-                  // aria-describedby="token-symbol-text"
                 />
-                {/* <FormHelperText id="token-symbol-text">
-                  The symbol of the pool
-                </FormHelperText> */}
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -197,7 +203,7 @@ export default function AddNewToken() {
                 <Input
                   id="token-address"
                   name="tokenAddress"
-                  value={newToken.tokenAddress}
+                  value={token.tokenAddress}
                   onChange={handleChange}
                   aria-describedby="token-address-text"
                 />
@@ -212,106 +218,28 @@ export default function AddNewToken() {
                 <Input
                   id="dex"
                   name="DEX"
-                  value={newToken.DEX}
+                  value={token.DEX}
                   onChange={handleChange}
-                  // aria-describedby="dex-text"
                 />
-                {/* <FormHelperText id="dex-text">
-                  The adress of the token as on seeswap
-                </FormHelperText> */}
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              {/* <MDEditor
-                value={newToken.displayInfo}
-                onChange={(text) => {
-                  const tempToken = { ...newToken };
-                  tempToken.displayInfo = text;
-                  setNewToken(tempToken);
-                  console.log(tempToken);
-                }}
-              /> */}
-              {/* <TextareaAutosize
-                className={classes.textareaAutosize}
-                // style={}
-                value={newToken.displayInfo}
-                name="displayInfo"
-                onChange={handleChange}
-                aria-label="display-info"
-                rowsMin={30}
-                placeholder="Enter diplay inof here"
-              /> */}
               <Editor
+                displayInfo={displayInfo}
                 setDisplayInfo={setDisplayInfo}
-                // setNewToken={setNewToken}
-                // newToken={newToken}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid> */}
           </Grid>
           <Button
             fullWidth
             variant="contained"
             className={classes.submit}
-            onClick={addNewToken}
+            onClick={saveToken}
           >
-            Add token
+            Save token
           </Button>
-          {/* <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid> */}
         </form>
       </div>
-      {/* <Box sx={{ mt: 5 }}>
-        <Copyright />
-      </Box> */}
     </Container>
   );
 }
-// AddNewToken.getInitialProps = async ({ query }) => {
-//   const moment = (await import('MDEditor')).default()
-//   return {
-//     date: moment.format('dddd D MMMM YYYY'),
-//     post: posts[query.id]
-//   }
-// }

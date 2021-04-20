@@ -1,7 +1,7 @@
 const Joi = require("joi");
 // Joi.objectId = require("joi-objectid")(Joi);
 
-const newToken = (body) => {
+const token = (body) => {
   const schema = Joi.object({
     image: Joi.string().required(),
     address: Joi.string().trim().required(), //! more validation sample: "0x51245b9bf3648b3ea6f21f3ba5ae3a946db8a572"
@@ -15,5 +15,5 @@ const newToken = (body) => {
 };
 
 module.exports = {
-  newToken,
+  token,
 };

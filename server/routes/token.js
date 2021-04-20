@@ -2,9 +2,15 @@ const router = require("express").Router();
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const upload = require("../config/multerConfig");
+// const upload = require("../config/multerConfig");
 const moment = require("moment");
 // const upload = require("multer")();
+
+///!
+
+const cloudinary = require("../config/cloudinaryConfig");
+const upload = require("../config/multerConfig");
+///!
 
 // * Models
 const Token = require("../models/token");
@@ -160,60 +166,61 @@ router.get("/:id", async (req, res) => {
 // * Add a new token
 //! admin
 // ! add name
-router.post("/new", upload.single("image"), async (req, res) => {
-  //! no imgae upload
+
+router.post("/new", async (req, res) => {
   const count = await Token.count();
-  console.log(req.body.newToken);
-  console.log(req.body);
-  console.log(req.file.filename);
-  const body = JSON.parse(req.body.newToken);
-  body.image = req.file.filename.toLowerCase();
-  // return;
-  const { value, error } = tokenValidator.newToken(body);
+
+  const { value, error } = tokenValidator.token(req.body);
+
   if (error)
     return res
       .status(400)
       .send({ error: "Invalid token body", message: error.details[0].message });
-  // const filePath = path.resolve(__dirname, "../tokenFiles", value.symbol);
-  // fs.writeFileSync(filePath, value.displayInfo);
-  // value.displayInfo = filePath;
-  // console.log(filePath);
+
   const newToken = new Token({ ...value, number: count + 1 }); //! pick
   //! add token validation
+
   await newToken.save();
+  console.log("donee", newToken);
   res.send(newToken);
+});
+
+// * Edit a new token
+//! admin
+
+router.put("/edit/:id", async (req, res) => {
+  // const count = await Token.count();
+  const { id } = req.params;
+  const { value, error } = tokenValidator.token(req.body);
+
+  if (error)
+    return res
+      .status(400)
+      .send({ error: "Invalid token body", message: error.details[0].message });
+
+  // const newToken = new Token({ ...value, number: count + 1 }); //! pick
+  //! add token validation
+  const token = await Token.findByIdAndUpdate(id, { ...value });
+
+  // await newToken.save();
+  console.log("donee", token);
+  res.send(token);
 });
 
 //! implement change password and forget password
 
-router.post(
-  "/newDisplayInfoImage",
-  upload.single("image"),
-  async (req, res) => {
-    //! no imgae upload
-    // const count = await Token.count();
-    // console.log(req.body.newToken);
-    // console.log(req.body);
-    console.log(req.file.filename);
-    // const body = JSON.parse(req.body.newToken);
-    // body.image = req.file.filename.toLowerCase();
-    // // return;
-    // const { value, error } = tokenValidator.newToken(body);
-    // if (error)
-    //   return res
-    //     .status(400)
-    //     .send({ error: "Invalid token body", message: error.details[0].message });
-    // const filePath = path.resolve(__dirname, "../tokenFiles", value.symbol);
-    // fs.writeFileSync(filePath, value.displayInfo);
-    // value.displayInfo = filePath;
-    // console.log(filePath);
-    // const newToken = new Token({ ...value, number: count + 1 }); //! pick
-    // //! add token validation
-    // await newToken.save();
-    res.send({ url: `/uploads/${req.file.filename}`, name: req.file.filename });
-  }
-);
+router.post("/imageUpload", upload.single("image"), async (req, res) => {
+  const result = await cloudinary.uploader.upload(
+    req.file.path,
+    {
+      public_id: `tokens/${req.file.filename}`,
+    },
+    function (error) {
+      if (error) console.log("error in uploading img", error);
+    }
+  );
 
-router.get("/", async (req, res) => {});
+  res.send({ url: result.url, name: req.file.filename });
+});
 
 module.exports = router;
