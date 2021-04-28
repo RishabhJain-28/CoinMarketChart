@@ -3,6 +3,7 @@ const fs = require("fs");
 const main = require("../data/main");
 const Token = require("../models/token");
 const Chart = require("../models/chart");
+// const PricesTemp = require("../models/prices_temp");
 const Prices = require("../models/prices");
 
 const axios = require("axios");
@@ -123,7 +124,7 @@ module.exports = (io) => {
       if (poolIndex === -1 || isFound) return;
       found.push(element.symbol);
       //   console.log(element.name);
-      console.log("found", data[poolIndex].symbol);
+      //? console.log("found", data[poolIndex].symbol);
       data[poolIndex].found = true;
       data[poolIndex].contractAddress = element.contractAddress;
       data[poolIndex].maxSupply = Math.floor(
@@ -144,13 +145,17 @@ module.exports = (io) => {
     } = await axios.get(
       "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
     );
-    console.log("onePriceInUSD in CRON", onePriceInUSD);
+    //? console.log("onePriceInUSD in CRON", onePriceInUSD);
 
-    const d = moment(new Date()).format("YYYY-MM-DD");
-    const currentDate = new Date(d);
-    let start = moment(new Date(d));
+    const d = moment(new Date());
+    const hour = Math.floor(Number(d.format("H")) / 6);
+    const currentDate = new Date(d.format("YYYY-MM-DD"));
+
+    // currentDate.setHours(hour * 6);
+
+    let start = moment(new Date(d.format("YYYY-MM-DD")));
     const date_value = start.format("MMMM Do YYYY, h:mm:ss a");
-    console.log("date_value", date_value);
+    //? console.log("date_value", date_value);
     console.log("currentDate", currentDate);
 
     let cd = moment(new Date());
@@ -168,23 +173,30 @@ module.exports = (io) => {
         token: ele._id,
       });
       if (!bucket) {
+        console.log("new bucket");
         bucket = new Prices({
           date: currentDate,
           token: ele._id,
           // intervals: {},
         });
+      } else {
+        // console.log("old bucket");
+        // console.log("bucket", bucket.date);
       }
-      // const hour = parseInt(currentDate.format("H"));
+
+      // const hour = Math.floor(Number(cd.format("H")) % 6);
       const hour = cd.format("H");
+
       const minuteNum = parseInt(cd.format("m"));
       const q = parseInt(minuteNum / 5);
       const minute = q * 5;
-      console.log("hour", hour);
-      console.log("minute", minute);
+      // console.log("hour", hour);
+      // console.log("minute", minute);
       bucket.intervals[hour][minute] = { USD, ONE, BTC };
       // console.log(bucket.intervals);
       // console.log(bucket.intervals[hour]);
-      console.log(bucket.intervals[hour][minute]);
+      // console.log(bucket.intervals[hour][minute]);
+      console.log(moment(bucket.date).format("MMMM Do YYYY h:mm:ss a"));
       await bucket.save();
       ele.bucket = bucket;
     };
@@ -205,22 +217,24 @@ module.exports = (io) => {
   // getUpadtedData();
   // })();
   let minutes = "";
-  // for (let i = 0; i < 58; i += 1) {
-  //   minutes += `${i},`;
-  // }
-  // minutes += `58`;
-  // let minutes = "";
-  for (let i = 0; i < 55; i += 5) {
+  for (let i = 0; i < 58; i += 1) {
     minutes += `${i},`;
   }
-  minutes += `55`;
+  minutes += `58`;
+  ////////////////////////////////////////////!
+  // let minutes = "";
+  // for (let i = 0; i < 55; i += 5) {
+  //   minutes += `${i},`;
+  // }
+  // minutes += `55`;
+  ////////////////////////////////////////////!
   // console.log(minutes);
   const task = cron.schedule(`${minutes} * * * *`, getUpadtedData, {
     scheduled: false,
   });
   // console.log(process.env.CRON);
   if (process.env.CRON === "true") {
-    console.log("task STARTED");
+    console.log("cron STARTED");
     task.start();
   }
   // getUpadtedData();

@@ -19,7 +19,7 @@ for (let i = 0; i < 60; i += 5) {
   minutes[i] = { ...MINUTE_OBJ };
 }
 const hours = {};
-for (let i = 0; i < 24; i += 1) {
+for (let i = 0; i < 6; i += 1) {
   hours[i] = { ...minutes };
 }
 

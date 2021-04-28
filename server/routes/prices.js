@@ -7,6 +7,7 @@ const moment = require("moment");
 // * Models
 
 const Prices = require("../models/prices");
+const PricesTemp = require("../models/prices_temp");
 
 // * Middleware
 
@@ -61,12 +62,17 @@ router.get("/data/:tokenId/:start/:end/:every", async (req, res) => {
 
   // const id = "5ff12bbe8405ff4e70a04b67";
   // const token = await Token.findById(id).populate("chartData");
+  // var endUTC = Math.round(new Date(end).getTime() / 1000);
+  // var startUTC = Math.round(new Date(start).getTime() / 1000);
+
   const chartData = await Prices.find({
     token: tokenId,
     date: {
       // $and: {
       $lte: end,
       $gte: start,
+      // $lte: endUTC,
+      // $gte: startUTC,
       // },
     },
   }).sort("date");
@@ -141,12 +147,15 @@ router.get("/data-test/:tokenId", async (req, res) => {
   // const { start: s, end: e, every, tokenId } = req.params;
   const step = 5;
 
-  const chartData = await Prices.find({ token: tokenId }).sort("date");
+  const chartData = await PricesTemp.find({ token: tokenId }).sort("date");
   console.timeEnd("dbsave2");
+
   console.log("chartData.length", chartData.length);
   console.log("fetched");
   console.log("step", step);
   const data = [];
+  return res.send(chartData);
+
   chartData.forEach((day, i) => {
     let t = 0;
     while (t / 60 < 24) {

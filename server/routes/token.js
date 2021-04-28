@@ -68,8 +68,12 @@ router.get("/BTCUSDT", async (req, res) => {
 
 // * get all tokens
 router.get("/", async (req, res) => {
+  console.time("tokens");
   const tokens = await Token.find().select("-displayInfo");
+  console.timeEnd("tokens");
+
   // console.log("tokens", tokens);
+
   // let [token] = tokens;
 
   // console.log(token);
