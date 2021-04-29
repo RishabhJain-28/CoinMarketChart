@@ -5,6 +5,7 @@ const tokenSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
+      default: "name", //!temp REMOVE THIS
     },
     number: {
       type: Number,

@@ -110,6 +110,7 @@ module.exports = () => {
     // console.log(contractAddressData[0]);
     // data.forEach((t) =>console.log(t.))
     const found = [];
+
     // console.log('re')
     // console.log("re");
 
@@ -200,7 +201,7 @@ module.exports = () => {
       await bucket.save();
       ele.bucket = bucket;
     };
-    data.forEach(addDataPoint);
+    // data.forEach(addDataPoint);
     data.forEach(async (d, i) => {
       await d.save();
       console.log("done", i);
@@ -237,20 +238,4 @@ module.exports = () => {
     console.log("cron STARTED");
     task.start();
   }
-  // getUpadtedData();
 };
-
-// router.get("/BTCUSDT", async (req, res) => {
-//   const { data } = await axios.get(
-//     "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
-//   );
-//   console.log(data);
-//   res.send(data);
-//   //! save to db
-// });
-
-// async function getONEUSDT() {
-//   const { data } = await axios.get(
-//     "https://api.binance.com/api/v1/ticker/24hr?symbol=ONEUSDT"
-//   );
-// }

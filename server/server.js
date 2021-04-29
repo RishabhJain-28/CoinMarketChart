@@ -29,9 +29,9 @@ module.exports = function (app) {
       if (err) return console.log("Connection to MongoDB failed.\n", err);
       console.log("Connected to MongoDB");
       // require("./util/testChart");
-      // require("./tempAddData");
     }
   );
+  // require("./test.js");
 
   app.use(
     session({
