@@ -33,8 +33,4 @@ yarn-error.log*
 # vercel
 .vercel
 
-<<<<<<< HEAD
 /server/dbShift.js
-=======
-temp
->>>>>>> origin/master
