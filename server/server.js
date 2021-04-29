@@ -81,7 +81,7 @@ module.exports = function (app) {
   // });
 
   // * CRON
-  require("./util/cron")(io);
+  require("./util/cron");
 
   // * set initConversionRates cron
   const { init } = require("./util/conversionRates");
