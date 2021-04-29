@@ -7,6 +7,10 @@ import Paper from "@material-ui/core/Paper";
 // const placeholder = ,{buttonList}
 
 const View = ({ token, unit }) => {
+  if (!token.displayInfo) {
+    console.log("123456789");
+    return <>LOADING</>;
+  }
   //   const handleChange = (content) => {
   // console.log(content);
 

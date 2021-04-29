@@ -66,7 +66,7 @@ const moment = require("moment");
 //   await ele.save();
 // }
 
-module.exports = (io) => {
+module.exports = () => {
   // addDataPoint({ _id: "5ff12bbe8405ff4e70a04b67", price: 2 });
   // return;
   async function getUpadtedData() {
@@ -196,7 +196,7 @@ module.exports = (io) => {
       // console.log(bucket.intervals);
       // console.log(bucket.intervals[hour]);
       // console.log(bucket.intervals[hour][minute]);
-      console.log(moment(bucket.date).format("MMMM Do YYYY h:mm:ss a"));
+      // console.log(moment(bucket.date).format("MMMM Do YYYY h:mm:ss a"));
       await bucket.save();
       ele.bucket = bucket;
     };
@@ -205,28 +205,28 @@ module.exports = (io) => {
       await d.save();
       console.log("done", i);
     });
-    io.emit("update", {
-      tokens: data,
-      conversionPrices: {
-        onePriceInUSD,
-        btcPriceInUSD,
-      },
-    });
+    // io.emit("update", {
+    //   tokens: data,
+    //   conversionPrices: {
+    //     onePriceInUSD,
+    //     btcPriceInUSD,
+    //   },
+    // });
     console.log("done");
   }
   // getUpadtedData();
-  // })();
-  let minutes = "";
-  for (let i = 0; i < 58; i += 1) {
-    minutes += `${i},`;
-  }
-  minutes += `58`;
-  ////////////////////////////////////////////!
+  // // })();
   // let minutes = "";
-  // for (let i = 0; i < 55; i += 5) {
+  // for (let i = 0; i < 58; i += 1) {
   //   minutes += `${i},`;
   // }
-  // minutes += `55`;
+  // minutes += `58`;
+  ////////////////////////////////////////////!
+  let minutes = "";
+  for (let i = 0; i < 55; i += 5) {
+    minutes += `${i},`;
+  }
+  minutes += `55`;
   ////////////////////////////////////////////!
   // console.log(minutes);
   const task = cron.schedule(`${minutes} * * * *`, getUpadtedData, {

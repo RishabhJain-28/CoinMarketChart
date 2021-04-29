@@ -4,9 +4,9 @@ import Title from "./Title";
 import toFixed from "../../util/toFixed";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-export default function TokenInfoCard({ token }) {
+export default function TokenInfoCard({ token, unit }) {
   const matches = useMediaQuery("(max-width:960px)");
-  const { price, volume, contractAddress, circulationSupply } = token;
+  const { convertedPrices, volume, contractAddress, circulationSupply } = token;
 
   const StyledTypography = ({ children, ...props }) => {
     return (
@@ -18,7 +18,7 @@ export default function TokenInfoCard({ token }) {
   return (
     <React.Fragment>
       <Title>Current Price:</Title>
-      <StyledTypography>{price}</StyledTypography>
+      <StyledTypography>{convertedPrices[unit]}</StyledTypography>
       <Title>Volume</Title>
       <StyledTypography>{volume}</StyledTypography>
       <Title>Circulation Supply</Title>

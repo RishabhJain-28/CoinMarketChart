@@ -2,7 +2,6 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
-const ioInit = require("socket.io");
 const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
@@ -70,19 +69,23 @@ module.exports = function (app) {
     console.log(`Server started on port ${port}`)
   );
 
-  // * Socket IO
-  const io = ioInit(server, {
-    cors: {
-      origin: "*", //! change for security
-    },
-  });
-  io.on("connection", (socket) => {
-    console.log(socket.id);
-    socket.emit("hello", "world");
-  });
+  // // * Socket IO
+  // const io = ioInit(server, {
+  //   cors: {
+  //     origin: "*", //! change for security
+  //   },
+  // });
+  // io.on("connection", (socket) => {
+  //   console.log(socket.id);
+  //   socket.emit("hello", "world");
+  // });
 
   // * CRON
   require("./util/cron")(io);
+
+  // * set initConversionRates cron
+  const { init } = require("./util/conversionRates");
+  init(app);
 
   // * Production setup
   if (process.env.NODE_ENV === "production") {

@@ -1,31 +1,13 @@
 const router = require("express").Router();
-const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
-// const upload = require("../config/multerConfig");
 const moment = require("moment");
-// const upload = require("multer")();
-
-///!
 
 const cloudinary = require("../config/cloudinaryConfig");
 const upload = require("../config/multerConfig");
-///!
+const { getConversionRates } = require("../util/conversionRates");
 
 // * Models
 const Token = require("../models/token");
 const Prices = require("../models/prices");
-
-// (async function a() {
-//   // let i = 1;
-//   const tokens = await Token.find();
-//   tokens.forEach(async (t) => {
-//     // t.number = i;
-//     // i++;
-//     t.maxSupply = t.circulationSupply;
-//     await t.save();
-//   });
-// })();
 
 // * Middleware
 
@@ -33,37 +15,9 @@ const Prices = require("../models/prices");
 const tokenValidator = require("../validation/token");
 
 router.get("/conversionPrices", async (req, res) => {
-  const { data: ONE } = await axios.get(
-    "https://api.binance.com/api/v1/ticker/price?symbol=ONEUSDT"
-  );
-  const { data: BTC } = await axios.get(
-    "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
-  );
-  const data = {
-    onePriceInUSD: ONE.price,
-    btcPriceInUSD: BTC.price,
-  };
-  // console.log(data);
-  res.send(data);
-  //! save to db
-});
-
-router.get("/ONEUSDT", async (req, res) => {
-  const { data } = await axios.get(
-    "https://api.binance.com/api/v1/ticker/price?symbol=ONEUSDT"
-  );
-  // console.log(data);
-  res.send(data);
-  //! save to db
-});
-
-router.get("/BTCUSDT", async (req, res) => {
-  const { data } = await axios.get(
-    "https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT"
-  );
-  // console.log(data);
-  res.send(data);
-  //! save to db
+  const conversionRates = await getConversionRates(req);
+  console.log("data", conversionRates);
+  res.send(conversionRates);
 });
 
 // * get all tokens
@@ -71,23 +25,23 @@ router.get("/", async (req, res) => {
   console.time("tokens");
   const tokens = await Token.find().select("-displayInfo");
   console.timeEnd("tokens");
+  const { onePriceInUSD, btcPriceInUSD } = await getConversionRates(req);
 
-  // console.log("tokens", tokens);
-
-  // let [token] = tokens;
-
-  // console.log(token);
-  // console.log(token.name);
-  // console.log("a");
-  // console.log(tokens);
-  // tokens.forEach((t) => console.log(t.symbol));
-  res.json(tokens);
+  const tokensJSON = tokens.map((token) => {
+    const ONE = token.price;
+    const USD = onePriceInUSD / ONE;
+    const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
+    const t = token.toJSON();
+    t.convertedPrices = {
+      ONE,
+      USD,
+      BTC,
+    };
+    return t;
+  });
+  res.json(tokensJSON);
 });
 
-// router.get("/last24hours/:tokenId", async (req, res) => {
-// console.log("a");
-// const {tokenId} = "5ff12e1f1725fe681c430a57";
-// const { tokenId } = req.params;
 const get24HourDiff = async (tokenId) => {
   // const today = new Date("2020-10-26T00:00:00.000+00:00");
   const today = new Date();
@@ -144,27 +98,26 @@ const get24HourDiff = async (tokenId) => {
   return data;
   // res.send(data);
 };
-// res.send(data);
-// });
 
 // * get one token
 router.get("/:id", async (req, res) => {
-  // a();
   const { id } = req.params;
   const token = await Token.findById(id);
   if (!token) return res.statu(400).send({ error: "Invalid token id" });
   const changeIn24Hour = await get24HourDiff(id);
-  // console.log("token", token);
-  // let [token] = tokens;
-  // const filePath = path.resolve(__dirname, "../tokenFiles", token.symbol);
 
-  // const displayInfo = fs.readFileSync(filePath);
-  // console.log(displayInfo);
-  // console.log(token);
-  // console.log(token.name);
-  // const a =
-  // res.json({ ...token.toJSON(), displayInfo });
-  res.json({ ...token.toJSON(), changeIn24Hour });
+  const { onePriceInUSD, btcPriceInUSD } = await getConversionRates(req);
+  const ONE = token.price;
+  const USD = onePriceInUSD / ONE;
+  const BTC = (onePriceInUSD / ONE) * btcPriceInUSD;
+  const t = token.toJSON();
+  t.convertedPrices = {
+    ONE,
+    USD,
+    BTC,
+  };
+
+  res.json({ ...t, changeIn24Hour });
 });
 
 // * Add a new token

@@ -91,6 +91,10 @@ const tokenSchema = mongoose.Schema(
 tokenSchema.virtual("marketCap").get(function () {
   return this.circulationSupply * this.price;
 });
+
+// tokenSchema.virtual("convertedPrices").get(function async() {
+//   return  await
+// });
 tokenSchema.virtual("chartData", {
   ref: "chart",
   localField: "_id",
