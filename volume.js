@@ -1,11 +1,15 @@
+import hmy from "./hmy";
+import service from "./service";
 const oneArgHrc20Methods = ["approve", "mint", "burn", "burnFrom"];
-
+const HRC20_ABI = require("./HRC20_ABI.json");
 const twoArgsHrc20Methods = ["allowance"];
 const HRC20LIST_URL = `https://explorer.harmony.one:8888/hrc20-token-list`;
+const HRC20Address = []; // the contract address of the token
 
 class Volume {
+  // this function will return all the txs
   HRC20Txs() {
-    const c = this.$store.data.hmy.contract(this.$store.data.HRC20_ABI); // defineing
+    const c = hmy.contract(HRC20_ABI);
     return this.txs.reduce((list, tx) => {
       if (this.hrc20info(tx.to) == undefined) {
         return list;
@@ -29,31 +33,6 @@ class Volume {
             amount: decodeObj.params[2],
           },
         });
-      else if (
-        decodeObj.abiItem &&
-        oneArgHrc20Methods.includes(decodeObj.abiItem.name)
-      )
-        list.push({
-          tx,
-          hrc20tx: {
-            from: tx.from,
-            to: decodeObj.params[0],
-            amount: decodeObj.params[1],
-          },
-        });
-      else if (
-        decodeObj.abiItem &&
-        twoArgsHrc20Methods.includes(decodeObj.abiItem.name)
-      )
-        list.push({
-          tx,
-          hrc20tx: {
-            from: decodeObj.params[0],
-            to: decodeObj.params[1],
-            amount: decodeObj.params[2],
-          },
-        });
-      console.log(list);
       return list;
     });
   }
@@ -71,8 +50,9 @@ class Volume {
         this.txs = result.txs;
       });
   }
+
   hrc20info(id) {
-    return this.Hrc20Address[id];
+    return Hrc20Address[id];
   }
 
   hrc20Balance(id, amount) {
