@@ -1,5 +1,4 @@
 import axios from "axios";
-import store from "./store";
 import {
   EXPLORER_BACKEND_URL,
   EXPLORER_BACKEND_WS,
@@ -56,13 +55,6 @@ function sendGet(url, params) {
     if (data.error) {
       alert(`Websocket Error: ${data.error}`);
       return;
-    }
-    if (data.cmd === "reset") {
-      store.reset();
-    } else if (data.cmd === "update") {
-      store.update(data);
-    } else if (data.cmd === "init") {
-      store.update(data);
     }
   });
 
