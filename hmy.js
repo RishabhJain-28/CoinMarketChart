@@ -1,4 +1,4 @@
-import { SDK_NODE } from "./globalConfig.js";
+const { SDK_NODE } = require("./globalConfig.js");
 
 const { Harmony } = require("@harmony-js/core");
 const { ChainID, ChainType } = require("@harmony-js/utils");
@@ -22,7 +22,8 @@ const hmySDK = new Harmony(
 
 const GAS_PRICE = new hmySDK.utils.Unit(1).asGwei().toHex(); // 1Gwei
 
-let address = null;
+let address = "one1h5ttpvht2g9hla9yz4knvlhrtxkpn3f3f5lkgk";
+// let address = null;
 
 function contract(
   abi,
@@ -34,8 +35,9 @@ function contract(
   }
 ) {
   let contract = hmySDK.contracts.createContract(abi, to, options);
-  if (window.harmony)
-    contract.wallet.signTransaction = window.harmony.signTransaction; // or importPrivate
+  // console.log("contract ", contract);
+  // if (window.harmony)
+  //   contract.wallet.signTransaction = window.harmony.signTransaction; // or importPrivate
   let decodeParameters = (abi, hexdata) => {
     if (0 === abi.length) return [];
     let params = contract.abiCoder.decodeParameters(abi, hexdata);
@@ -95,7 +97,7 @@ function contractDeploy(abi, code, _arguments) {
   });
 }
 
-export default {
+module.exports = {
   contract,
   contractDeploy,
 };

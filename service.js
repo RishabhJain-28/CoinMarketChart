@@ -1,10 +1,11 @@
-import axios from "axios";
-import {
+const axios = require("axios");
+const {
   EXPLORER_BACKEND_URL,
   EXPLORER_BACKEND_WS,
   SECRET,
-} from "./globalConfig.js";
+} = require("./globalConfig.js");
 
+const WebSocket = require("ws");
 // For test: asios.get('...').delay(1000)
 Promise.prototype.delay = function (time) {
   return new Promise((resolve) => {
@@ -29,12 +30,15 @@ function authGet(url, _params) {
 }
 
 function sendGet(url, params) {
+  console.log(EXPLORER_BACKEND_URL + url, params);
+
   //if(url == '/hrc20-txs' || url == '/hrc20-latest')
   //  return axios.get('http://127.0.0.1:8080' + url, params); // .delay(500)
   return axios.get(EXPLORER_BACKEND_URL + url, params); // .delay(500)
 }
 
 (function listenWebsocket() {
+  // console.log(EXPLORER_BACKEND_WS);
   const ws = new WebSocket(EXPLORER_BACKEND_WS, [SECRET]);
 
   ws.addEventListener("open", () => {
@@ -67,7 +71,7 @@ function sendGet(url, params) {
   });
 })();
 
-export default {
+module.exports = {
   getHrc20Txs(params) {
     return authGet("/hrc20-txs", { params }).then((res) => {
       return res.data;
